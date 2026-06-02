@@ -331,10 +331,6 @@ svg {
   cursor: pointer;
 }
 
-.tutorial-open-button {
-  min-width: 0;
-}
-
 .secondary-button:hover {
   border-color: rgba(15, 140, 123, 0.36);
   background: var(--teal-soft);

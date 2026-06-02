@@ -729,7 +729,6 @@ const COPY = {
     previousLesson: "Previous lesson",
     nextLesson: "Next lesson",
     restartLesson: "Restart lesson",
-    openInstructions: "Finger placement",
     wpm: "WPM",
     accuracy: "Accuracy",
     streak: "Streak",
@@ -787,7 +786,6 @@ const COPY = {
     previousLesson: "Նախորդ դաս",
     nextLesson: "Հաջորդ դաս",
     restartLesson: "Նորից սկսել",
-    openInstructions: "Մատների դիրքը",
     wpm: "Բ/ր",
     accuracy: "Ճշտություն",
     streak: "Շարք",
@@ -879,14 +877,6 @@ const ICON_PATHS = {
     <>
       <rect x="3" y="5" width="18" height="14" rx="2" />
       <path d="M7 9h.01M11 9h.01M15 9h.01M19 9h.01M7 13h.01M11 13h.01M15 13h.01M19 13h.01M8 17h8" />
-    </>
-  ),
-  hand: (
-    <>
-      <path d="M8 11V5.5a1.5 1.5 0 0 1 3 0V11" />
-      <path d="M11 10V4.5a1.5 1.5 0 0 1 3 0V11" />
-      <path d="M14 10V6a1.5 1.5 0 0 1 3 0v7" />
-      <path d="M17 12.5V9a1.5 1.5 0 0 1 3 0v4.5A7.5 7.5 0 0 1 12.5 21H12a6 6 0 0 1-5.1-2.8L4 13.5a1.7 1.7 0 0 1 2.8-1.9L9 14" />
     </>
   ),
   pause: <path d="M8 5v14M16 5v14" />,
@@ -1314,7 +1304,6 @@ function PracticeSurface({
   onLanguageChange,
   onArmenianKeyboardLayoutChange,
 }) {
-  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const isSpeedLesson = lesson.type === "speed";
   const expectedKey = lessonText[position] || "";
   const stats = getStats({
@@ -1359,10 +1348,6 @@ function PracticeSurface({
         <div className="topbar-controls">
           <LanguageSwitcher language={language} copy={copy} onLanguageChange={onLanguageChange} />
           {language === "hy" ? <ArmenianKeyboardSwitcher keyboardLayout={armenianKeyboardLayout} copy={copy} onKeyboardLayoutChange={onArmenianKeyboardLayoutChange} /> : null}
-          <button className="secondary-button tutorial-open-button" type="button" onClick={() => setIsTutorialOpen(true)}>
-            <Icon name="hand" />
-            {copy.openInstructions}
-          </button>
           <div className="topbar-actions">
             <button className="icon-button" type="button" onClick={() => onMoveLesson(-1)} disabled={lessonIndex === 0} aria-label={copy.previousLesson} title={copy.previousLesson}>
               <Icon name="chevronLeft" />
@@ -1390,7 +1375,6 @@ function PracticeSurface({
 
       <PromptPanel lesson={lesson} promptText={lessonText} position={position} completion={completion} lastKey={lastKey} lastResult={lastResult} statusMessage={statusMessage} copy={copy} />
       <VisualKeyboard keyboardRows={keyboardRows} expectedKey={expectedKey} lessonKeys={lesson.keys} lastKey={lastKey} lastResult={lastResult} copy={copy} keyboardMeta={keyboardMeta} />
-      {isTutorialOpen ? <FingerTutorialModal lesson={lesson} copy={copy} onClose={() => setIsTutorialOpen(false)} /> : null}
     </section>
   );
 }
