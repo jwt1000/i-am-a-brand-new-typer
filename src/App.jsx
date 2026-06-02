@@ -691,6 +691,7 @@ const COPY = {
     previousLesson: "Previous lesson",
     nextLesson: "Next lesson",
     restartLesson: "Restart lesson",
+    openInstructions: "Finger placement",
     wpm: "WPM",
     accuracy: "Accuracy",
     streak: "Streak",
@@ -748,6 +749,7 @@ const COPY = {
     previousLesson: "Նախորդ դաս",
     nextLesson: "Հաջորդ դաս",
     restartLesson: "Նորից սկսել",
+    openInstructions: "Մատների դիրքը",
     wpm: "Բ/ր",
     accuracy: "Ճշտություն",
     streak: "Շարք",
@@ -841,12 +843,22 @@ const ICON_PATHS = {
       <path d="M7 9h.01M11 9h.01M15 9h.01M19 9h.01M7 13h.01M11 13h.01M15 13h.01M19 13h.01M8 17h8" />
     </>
   ),
+  hand: (
+    <>
+      <path d="M8 11V5.5a1.5 1.5 0 0 1 3 0V11" />
+      <path d="M11 10V4.5a1.5 1.5 0 0 1 3 0V11" />
+      <path d="M14 10V6a1.5 1.5 0 0 1 3 0v7" />
+      <path d="M17 12.5V9a1.5 1.5 0 0 1 3 0v4.5A7.5 7.5 0 0 1 12.5 21H12a6 6 0 0 1-5.1-2.8L4 13.5a1.7 1.7 0 0 1 2.8-1.9L9 14" />
+    </>
+  ),
   pause: <path d="M8 5v14M16 5v14" />,
   play: <path d="m8 5 11 7-11 7z" />,
   restart: (
     <>
-      <path d="M3 12a9 9 0 1 0 3-6.7" />
-      <path d="M3 4v7h7" />
+      <path d="M3 12a9 9 0 0 1 15.4-6.3L21 8" />
+      <path d="M21 3v5h-5" />
+      <path d="M21 12a9 9 0 0 1-15.4 6.3L3 16" />
+      <path d="M3 21v-5h5" />
     </>
   ),
   target: (
@@ -1100,26 +1112,92 @@ function PromptPanel({ lesson, promptText, position, completion, lastKey, lastRe
   );
 }
 
-function FingerTutorial({ lesson, copy }) {
+function tutorialKeysFromText(keys, text) {
+  const source = text.toLocaleLowerCase();
+  return keys.filter((key) => key.trim() && source.includes(key.toLocaleLowerCase()));
+}
+
+function getTutorialKeyGroups(lesson) {
+  const leftKeys = tutorialKeysFromText(lesson.keys, lesson.tutorial.left);
+  const rightKeys = tutorialKeysFromText(lesson.keys, lesson.tutorial.right);
+  if (leftKeys.length || rightKeys.length) return { leftKeys, rightKeys };
+
+  const midpoint = Math.ceil(lesson.keys.length / 2);
+  return {
+    leftKeys: lesson.keys.slice(0, midpoint),
+    rightKeys: lesson.keys.slice(midpoint),
+  };
+}
+
+function KeyChips({ keys, copy }) {
   return (
-    <section className="finger-tutorial" aria-label={copy.tutorialTitle}>
-      <div className="tutorial-heading">
-        <span>{lesson.difficulty}</span>
-        <h3>{copy.tutorialTitle}</h3>
-      </div>
+    <div className="touch-keys">
+      {keys.map((key) => (
+        <span className="touch-key" key={key}>
+          {formatKey(key, copy)}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function HandOutline({ side }) {
+  const transform = side === "right" ? "scale(-1 1) translate(-240 0)" : undefined;
+  return (
+    <svg className="hand-outline" viewBox="0 0 240 170" role="img" aria-hidden="true">
+      <g transform={transform}>
+        <path className="palm-line" d="M78 88c0 42 26 65 64 65 31 0 55-20 55-51V83" />
+        <path className="finger-line" d="M79 93V47c0-9 7-16 16-16s16 7 16 16v48" />
+        <path className="finger-line" d="M111 91V31c0-9 7-16 16-16s16 7 16 16v64" />
+        <path className="finger-line" d="M143 94V39c0-9 7-16 16-16s16 7 16 16v62" />
+        <path className="finger-line" d="M175 103V56c0-8 6-14 14-14s14 6 14 14v48" />
+        <path className="thumb-line" d="M77 111 52 90c-8-7-20-1-18 10 2 12 17 25 31 39 14 13 31 21 51 21" />
+        <circle className="joint-dot" cx="95" cy="56" r="3" />
+        <circle className="joint-dot" cx="127" cy="45" r="3" />
+        <circle className="joint-dot" cx="159" cy="53" r="3" />
+        <circle className="joint-dot" cx="189" cy="69" r="3" />
+      </g>
+    </svg>
+  );
+}
+
+function FingerTutorialContent({ lesson, copy }) {
+  const { leftKeys, rightKeys } = getTutorialKeyGroups(lesson);
+  return (
+    <div className="finger-tutorial-content">
+      <span className="difficulty-pill">{lesson.difficulty}</span>
       <p>{lesson.tutorial.lead}</p>
-      <div className="finger-map">
-        <div>
+      <div className="hand-diagram-grid">
+        <div className="hand-card">
+          <HandOutline side="left" />
+          <KeyChips keys={leftKeys} copy={copy} />
           <strong>{lesson.tutorial.left}</strong>
           <span>{lesson.tutorial.leftLabel}</span>
         </div>
-        <div>
+        <div className="hand-card">
+          <HandOutline side="right" />
+          <KeyChips keys={rightKeys} copy={copy} />
           <strong>{lesson.tutorial.right}</strong>
           <span>{lesson.tutorial.rightLabel}</span>
         </div>
       </div>
       <p className="tutorial-reminder">{lesson.tutorial.reminder}</p>
-    </section>
+    </div>
+  );
+}
+
+function FingerTutorialModal({ lesson, copy, onClose }) {
+  return (
+    <div className="modal-backdrop" role="presentation">
+      <section className="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+        <button className="modal-close" type="button" onClick={onClose} aria-label={copy.close}>
+          ×
+        </button>
+        <p className="lesson-label">{lesson.title}</p>
+        <h2 id="tutorial-title">{copy.tutorialTitle}</h2>
+        <FingerTutorialContent lesson={lesson} copy={copy} />
+      </section>
+    </div>
   );
 }
 
@@ -1183,6 +1261,7 @@ function PracticeSurface({
   onLanguageChange,
   onArmenianKeyboardLayoutChange,
 }) {
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const isSpeedLesson = lesson.type === "speed";
   const expectedKey = lessonText[position] || "";
   const stats = getStats({
@@ -1227,6 +1306,10 @@ function PracticeSurface({
         <div className="topbar-controls">
           <LanguageSwitcher language={language} copy={copy} onLanguageChange={onLanguageChange} />
           {language === "hy" ? <ArmenianKeyboardSwitcher keyboardLayout={armenianKeyboardLayout} copy={copy} onKeyboardLayoutChange={onArmenianKeyboardLayoutChange} /> : null}
+          <button className="secondary-button tutorial-open-button" type="button" onClick={() => setIsTutorialOpen(true)}>
+            <Icon name="hand" />
+            {copy.openInstructions}
+          </button>
           <div className="topbar-actions">
             <button className="icon-button" type="button" onClick={() => onMoveLesson(-1)} disabled={lessonIndex === 0} aria-label={copy.previousLesson} title={copy.previousLesson}>
               <Icon name="chevronLeft" />
@@ -1252,9 +1335,9 @@ function PracticeSurface({
         <Metric iconName="clock" label={copy.time} value={`${timeValue}${copy.seconds}`} />
       </div>
 
-      <FingerTutorial lesson={lesson} copy={copy} />
       <PromptPanel lesson={lesson} promptText={lessonText} position={position} completion={completion} lastKey={lastKey} lastResult={lastResult} statusMessage={statusMessage} copy={copy} />
       <VisualKeyboard keyboardRows={keyboardRows} expectedKey={expectedKey} lessonKeys={lesson.keys} lastKey={lastKey} lastResult={lastResult} copy={copy} keyboardMeta={keyboardMeta} />
+      {isTutorialOpen ? <FingerTutorialModal lesson={lesson} copy={copy} onClose={() => setIsTutorialOpen(false)} /> : null}
     </section>
   );
 }

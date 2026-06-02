@@ -57,7 +57,8 @@ svg {
 .metric-icon svg,
 .lesson-check svg,
 .primary-button svg,
-.icon-button svg {
+.icon-button svg,
+.secondary-button svg {
   width: 20px;
   height: 20px;
 }
@@ -199,7 +200,6 @@ svg {
 
 .topbar,
 .metrics-strip,
-.finger-tutorial,
 .prompt-panel,
 .keyboard-panel,
 .progress-panel > * {
@@ -331,6 +331,10 @@ svg {
   cursor: pointer;
 }
 
+.tutorial-open-button {
+  min-width: 0;
+}
+
 .secondary-button:hover {
   border-color: rgba(15, 140, 123, 0.36);
   background: var(--teal-soft);
@@ -364,10 +368,9 @@ svg {
   padding: 10px;
 }
 
-.finger-tutorial {
+.finger-tutorial-content {
   display: grid;
-  gap: 12px;
-  padding: 18px;
+  gap: 14px;
 }
 
 .tutorial-heading {
@@ -378,7 +381,7 @@ svg {
 }
 
 .tutorial-heading h3,
-.finger-tutorial p {
+.finger-tutorial-content p {
   margin: 0;
 }
 
@@ -399,35 +402,85 @@ svg {
   text-transform: uppercase;
 }
 
-.finger-tutorial p {
+.difficulty-pill {
+  justify-self: start;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--yellow-soft);
+  color: #604603;
+  font-size: 0.76rem;
+  font-weight: 820;
+  text-transform: uppercase;
+}
+
+.finger-tutorial-content p {
   color: var(--muted);
   font-size: 0.95rem;
 }
 
-.finger-map {
+.hand-diagram-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
-.finger-map div {
+.hand-card {
   display: grid;
-  gap: 3px;
-  min-height: 68px;
-  align-content: center;
-  padding: 12px;
+  gap: 9px;
+  align-content: start;
+  padding: 14px;
   border-radius: 7px;
   background: var(--surface-strong);
 }
 
-.finger-map strong {
+.hand-outline {
+  width: 100%;
+  min-height: 150px;
+  color: var(--ink);
+}
+
+.finger-line,
+.palm-line,
+.thumb-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 5;
+}
+
+.joint-dot {
+  fill: var(--surface);
+  stroke: currentColor;
+  stroke-width: 3;
+}
+
+.touch-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.touch-key {
+  min-width: 34px;
+  padding: 7px 9px;
+  border: 1px solid var(--yellow);
+  border-radius: 7px;
+  background: var(--yellow-soft);
+  color: #5a4200;
+  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  font-weight: 860;
+  text-align: center;
+}
+
+.hand-card strong {
   color: var(--ink);
   font-size: 0.98rem;
   font-weight: 820;
   line-height: 1.2;
 }
 
-.finger-map span {
+.hand-card > span {
   color: var(--muted);
   font-size: 0.76rem;
   font-weight: 760;
@@ -835,11 +888,11 @@ svg {
   background: rgba(23, 33, 31, 0.42);
 }
 
-.stats-modal {
+.stats-modal,
+.tutorial-modal {
   position: relative;
   display: grid;
   gap: 14px;
-  width: min(560px, 100%);
   padding: 22px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -847,18 +900,32 @@ svg {
   box-shadow: 0 28px 80px rgba(20, 43, 38, 0.24);
 }
 
+.stats-modal {
+  width: min(560px, 100%);
+}
+
+.tutorial-modal {
+  width: min(760px, 100%);
+  max-height: min(90vh, 820px);
+  overflow-y: auto;
+}
+
 .stats-modal h2,
-.stats-modal p {
+.stats-modal p,
+.tutorial-modal h2,
+.tutorial-modal p {
   margin: 0;
 }
 
-.stats-modal h2 {
+.stats-modal h2,
+.tutorial-modal h2 {
   font-size: clamp(1.5rem, 4vw, 2.25rem);
   line-height: 1.05;
   font-weight: 860;
 }
 
-.stats-modal > p:not(.lesson-label) {
+.stats-modal > p:not(.lesson-label),
+.tutorial-modal > p:not(.lesson-label) {
   color: var(--muted);
 }
 
@@ -956,7 +1023,7 @@ svg {
 @media (max-width: 560px) {
   .lesson-list,
   .metrics-strip,
-  .finger-map,
+  .hand-diagram-grid,
   .modal-stats,
   .summary-grid {
     grid-template-columns: 1fr;
