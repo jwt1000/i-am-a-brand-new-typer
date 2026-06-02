@@ -272,9 +272,28 @@ const LESSON_SETS = {
       text: "dad is here. i like a slow start. i can type. i can type a little more. i like a slow and kind start.",
     },
     {
+      id: "capitals-intro",
+      level: "8",
+      section: "Capital Letters",
+      title: "Capital Letters: Easy",
+      focus: "Shift + letters",
+      difficulty: "Easy",
+      keys: ["shift", "a", "s", "d", "f", "j", "k", "l", "i", "m", "t"],
+      goal: "Use Shift to make the first letter uppercase.",
+      tutorial: {
+        lead: "Capital letters use a letter key plus Shift. Hold Shift with one pinky, press the letter with the other hand, then let both hands return home.",
+        left: "Left pinky: Shift. Left hand letters: A S D F T",
+        right: "Right pinky: Shift. Right hand letters: J K L I M",
+        leftLabel: "Left hand",
+        rightLabel: "Right hand",
+        reminder: "Use the opposite hand for Shift when you can. Release Shift right after the capital letter.",
+      },
+      text: "I am Sam. I like Tim. Dad is here. I can type. I am still calm.",
+    },
+    {
       id: "speed-1-minute",
       type: "speed",
-      level: "8",
+      level: "9",
       section: "Speed Challenge",
       title: "One Minute Speed",
       focus: "random sentences",
@@ -290,46 +309,46 @@ const LESSON_SETS = {
         reminder: "The challenge lasts one minute. Calm accuracy usually beats rushing.",
       },
       sentenceBank: [
-        "i can type with calm hands.",
-        "my fingers return to the home row.",
-        "a slow start can become a strong finish.",
-        "i read the next word before i press it.",
-        "spaces are typed with my thumb.",
-        "steady practice makes typing feel easier.",
-        "i keep my eyes on the screen.",
-        "short words help me build rhythm.",
-        "i correct my pace before i lose control.",
-        "each letter has its own finger.",
-        "my hands stay relaxed while i type.",
-        "good typing begins with good posture.",
-        "i breathe and keep a gentle rhythm.",
-        "one minute is enough for a clean score.",
-        "i can improve one round at a time.",
-        "the next sentence gives me a fresh start.",
-        "i type the word that i see.",
-        "accuracy helps speed grow naturally.",
-        "my wrists stay quiet and light.",
-        "i finish the line without looking down.",
-        "i let my fingers find the next key.",
-        "a clean word is better than a rushed word.",
-        "my shoulders stay loose while i practice.",
-        "i follow the sentence from left to right.",
-        "each space gives my hands a reset.",
-        "i keep typing even when the line changes.",
-        "my goal is a smooth one minute round.",
-        "i can slow down and still score well.",
-        "the home row is my starting place.",
-        "i notice mistakes and return to rhythm.",
-        "small improvements add up each day.",
-        "i type softly and keep moving.",
-        "the next word is the only word i need.",
-        "i keep both hands balanced on the keys.",
-        "my fingers move and return home.",
-        "i trust the practice more than speed.",
-        "one calm round can teach a lot.",
-        "i build confidence with every sentence.",
-        "i stay patient through the full minute.",
-        "good rhythm makes the keyboard quieter.",
+        "I can type with calm hands.",
+        "My fingers return to the home row.",
+        "A slow start can become a strong finish.",
+        "I read the next word before I press it.",
+        "Spaces are typed with my thumb.",
+        "Steady practice makes typing feel easier.",
+        "I keep my eyes on the screen.",
+        "Short words help me build rhythm.",
+        "I correct my pace before I lose control.",
+        "Each letter has its own finger.",
+        "My hands stay relaxed while I type.",
+        "Good typing begins with good posture.",
+        "I breathe and keep a gentle rhythm.",
+        "One minute is enough for a clean score.",
+        "I can improve one round at a time.",
+        "The next sentence gives me a fresh start.",
+        "I type the word that I see.",
+        "Accuracy helps speed grow naturally.",
+        "My wrists stay quiet and light.",
+        "I finish the line without looking down.",
+        "I let my fingers find the next key.",
+        "A clean word is better than a rushed word.",
+        "My shoulders stay loose while I practice.",
+        "I follow the sentence from left to right.",
+        "Each space gives my hands a reset.",
+        "I keep typing even when the line changes.",
+        "My goal is a smooth one minute round.",
+        "I can slow down and still score well.",
+        "The home row is my starting place.",
+        "I notice mistakes and return to rhythm.",
+        "Small improvements add up each day.",
+        "I type softly and keep moving.",
+        "The next word is the only word I need.",
+        "I keep both hands balanced on the keys.",
+        "My fingers move and return home.",
+        "I trust the practice more than speed.",
+        "One calm round can teach a lot.",
+        "I build confidence with every sentence.",
+        "I stay patient through the full minute.",
+        "Good rhythm makes the keyboard quieter.",
       ],
     },
   ],
@@ -601,9 +620,28 @@ const LESSON_SETS = {
       text: "ես լավ եմ։ ես գրում եմ դանդաղ։ ես կարող եմ գրել ավելի երկար։",
     },
     {
+      id: "capitals-intro",
+      level: "8",
+      section: "Մեծատառեր",
+      title: "Մեծատառեր․ հեշտ",
+      focus: "Shift և տառեր",
+      difficulty: "Հեշտ",
+      keys: ["shift", "ե", "ս", "դ", "ֆ", "լ", "ա", "վ", "գ", "ր", "մ"],
+      goal: "Օգտագործիր Shift-ը՝ առաջին տառը մեծատառ դարձնելու համար։",
+      tutorial: {
+        lead: "Մեծատառերի համար պահիր Shift-ը մեկ ճկույթով և սեղմիր տառը մյուս ձեռքով։ Հետո բաց թող Shift-ը և վերադարձիր հիմնական դիրքին։",
+        left: "Ձախ ճկույթ՝ Shift։ Ձախ ձեռքի տառեր՝ Ե Ս Դ Ֆ",
+        right: "Աջ ճկույթ՝ Shift։ Աջ ձեռքի տառեր՝ Լ Վ Գ Ր Մ",
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Մեծատառից հետո անմիջապես բաց թող Shift-ը, որպեսզի հաջորդ տառը փոքրատառ լինի։",
+      },
+      text: "Ես լավ եմ։ Ես գրում եմ։ Դասը հեշտ է։ Ես կարող եմ գրել։",
+    },
+    {
       id: "speed-1-minute",
       type: "speed",
-      level: "8",
+      level: "9",
       section: "Արագության փորձ",
       title: "Մեկ րոպեի արագություն",
       focus: "պատահական նախադասություններ",
@@ -619,46 +657,46 @@ const LESSON_SETS = {
         reminder: "Փորձը տևում է մեկ րոպե։ Ճիշտ ու հանգիստ մուտքագրումը սովորաբար ավելի լավ արդյունք է տալիս։",
       },
       sentenceBank: [
-        "ես գրում եմ հանգիստ ձեռքերով։",
-        "իմ մատները վերադառնում են հիմնական շարքին։",
-        "դանդաղ սկիզբը կարող է դառնալ ուժեղ ավարտ։",
-        "ես կարդում եմ հաջորդ բառը և հետո սեղմում։",
-        "բացատը սեղմում եմ բութ մատով։",
-        "կայուն վարժությունը հեշտացնում է մուտքագրումը։",
-        "աչքերս պահում եմ էկրանին։",
-        "կարճ բառերը օգնում են պահել ռիթմը։",
-        "ես դանդաղեցնում եմ, երբ կորցնում եմ վերահսկումը։",
-        "յուրաքանչյուր տառ ունի իր մատը։",
-        "ձեռքերս մնում են հանգիստ։",
-        "ճիշտ դիրքը օգնում է արագ գրել։",
-        "ես շնչում եմ և պահում մեղմ ռիթմ։",
-        "մեկ րոպեն բավարար է մաքուր արդյունքի համար։",
-        "յուրաքանչյուր փորձից հետո կարող եմ լավանալ։",
-        "հաջորդ նախադասությունը նոր սկիզբ է տալիս։",
-        "ես գրում եմ այն բառը, որը տեսնում եմ։",
-        "ճշտությունը բնական կերպով մեծացնում է արագությունը։",
-        "դաստակներս մնում են թեթև ու հանգիստ։",
-        "ես ավարտում եմ տողը առանց ներքև նայելու։",
-        "թող մատներս գտնեն հաջորդ ստեղնը։",
-        "ճիշտ բառը ավելի լավ է, քան շտապ բառը։",
-        "ուսերս մնում են ազատ, երբ վարժվում եմ։",
-        "ես հետևում եմ նախադասությանը ձախից աջ։",
-        "յուրաքանչյուր բացատ օգնում է նորից դասավորվել։",
-        "ես շարունակում եմ գրել, երբ տողը փոխվում է։",
-        "իմ նպատակը հանգիստ մեկ րոպե է։",
-        "կարող եմ դանդաղել և լավ արդյունք ստանալ։",
-        "հիմնական շարքը իմ մեկնարկային տեղն է։",
-        "ես նկատում եմ սխալը և վերադառնում ռիթմին։",
-        "փոքր առաջընթացը օրեցօր մեծանում է։",
-        "ես մեղմ եմ սեղմում և շարունակում եմ շարժվել։",
-        "հաջորդ բառը միակ բառն է, որի մասին մտածում եմ։",
-        "երկու ձեռքերս պահում եմ հավասարակշռված։",
-        "մատներս շարժվում են և վերադառնում իրենց տեղը։",
-        "ես վստահում եմ վարժությանը, ոչ թե շտապելուն։",
-        "մեկ հանգիստ փորձը կարող է շատ բան սովորեցնել։",
-        "յուրաքանչյուր նախադասությամբ վստահություն եմ հավաքում։",
-        "ամբողջ րոպեի ընթացքում մնում եմ համբերատար։",
-        "լավ ռիթմը ստեղնաշարը դարձնում է ավելի հանգիստ։",
+        "Ես գրում եմ հանգիստ ձեռքերով։",
+        "Իմ մատները վերադառնում են հիմնական շարքին։",
+        "Դանդաղ սկիզբը կարող է դառնալ ուժեղ ավարտ։",
+        "Ես կարդում եմ հաջորդ բառը և հետո սեղմում։",
+        "Բացատը սեղմում եմ բութ մատով։",
+        "Կայուն վարժությունը հեշտացնում է մուտքագրումը։",
+        "Աչքերս պահում եմ էկրանին։",
+        "Կարճ բառերը օգնում են պահել ռիթմը։",
+        "Ես դանդաղեցնում եմ, երբ կորցնում եմ վերահսկումը։",
+        "Յուրաքանչյուր տառ ունի իր մատը։",
+        "Ձեռքերս մնում են հանգիստ։",
+        "Ճիշտ դիրքը օգնում է արագ գրել։",
+        "Ես շնչում եմ և պահում մեղմ ռիթմ։",
+        "Մեկ րոպեն բավարար է մաքուր արդյունքի համար։",
+        "Յուրաքանչյուր փորձից հետո կարող եմ լավանալ։",
+        "Հաջորդ նախադասությունը նոր սկիզբ է տալիս։",
+        "Ես գրում եմ այն բառը, որը տեսնում եմ։",
+        "Ճշտությունը բնական կերպով մեծացնում է արագությունը։",
+        "Դաստակներս մնում են թեթև ու հանգիստ։",
+        "Ես ավարտում եմ տողը առանց ներքև նայելու։",
+        "Թող մատներս գտնեն հաջորդ ստեղնը։",
+        "Ճիշտ բառը ավելի լավ է, քան շտապ բառը։",
+        "Ուսերս մնում են ազատ, երբ վարժվում եմ։",
+        "Ես հետևում եմ նախադասությանը ձախից աջ։",
+        "Յուրաքանչյուր բացատ օգնում է նորից դասավորվել։",
+        "Ես շարունակում եմ գրել, երբ տողը փոխվում է։",
+        "Իմ նպատակը հանգիստ մեկ րոպե է։",
+        "Կարող եմ դանդաղել և լավ արդյունք ստանալ։",
+        "Հիմնական շարքը իմ մեկնարկային տեղն է։",
+        "Ես նկատում եմ սխալը և վերադառնում ռիթմին։",
+        "Փոքր առաջընթացը օրեցօր մեծանում է։",
+        "Ես մեղմ եմ սեղմում և շարունակում եմ շարժվել։",
+        "Հաջորդ բառը միակ բառն է, որի մասին մտածում եմ։",
+        "Երկու ձեռքերս պահում եմ հավասարակշռված։",
+        "Մատներս շարժվում են և վերադառնում իրենց տեղը։",
+        "Ես վստահում եմ վարժությանը, ոչ թե շտապելուն։",
+        "Մեկ հանգիստ փորձը կարող է շատ բան սովորեցնել։",
+        "Յուրաքանչյուր նախադասությամբ վստահություն եմ հավաքում։",
+        "Ամբողջ րոպեի ընթացքում մնում եմ համբերատար։",
+        "Լավ ռիթմը ստեղնաշարը դարձնում է ավելի հանգիստ։",
       ],
     },
   ],
@@ -683,7 +721,7 @@ const COPY = {
     appSubtitle: "Typing tutor for the first hour.",
     languageLabel: "Language",
     english: "English",
-    armenian: "Armenian",
+    armenian: "Հայերեն",
     lesson: "Lesson",
     start: "Start",
     ready: "Ready",
@@ -740,7 +778,7 @@ const COPY = {
     appName: "Առաջին ստեղներ",
     appSubtitle: "Ստեղնաշարի դասեր սկսնակների համար։",
     languageLabel: "Լեզու",
-    english: "Անգլերեն",
+    english: "English",
     armenian: "Հայերեն",
     lesson: "Դաս",
     start: "Սկսել",
@@ -914,6 +952,11 @@ function formatKey(key, copy) {
   if (key === " ") return copy.space;
   if (!key) return "";
   return key.toLocaleUpperCase();
+}
+
+function normalizeKey(key) {
+  if (!key) return "";
+  return key.toLocaleLowerCase();
 }
 
 function clamp(value, min, max) {
@@ -1090,10 +1133,6 @@ function PromptPanel({ lesson, promptText, position, completion, lastKey, lastRe
 
   return (
     <div className="prompt-panel">
-      <div className="prompt-header">
-        <p>{lesson.goal}</p>
-        <span>{completion}%</span>
-      </div>
       <div className="progress-track" aria-hidden="true">
         <span style={{ width: `${completion}%` }} />
       </div>
@@ -1113,8 +1152,8 @@ function PromptPanel({ lesson, promptText, position, completion, lastKey, lastRe
 }
 
 function tutorialKeysFromText(keys, text) {
-  const source = text.toLocaleLowerCase();
-  return keys.filter((key) => key.trim() && source.includes(key.toLocaleLowerCase()));
+  const sourceTokens = text.toLocaleLowerCase().match(/shift|[\p{L}\p{N}]+|[;,.\/'-]/gu) || [];
+  return keys.filter((key) => key.trim() && sourceTokens.includes(key.toLocaleLowerCase()));
 }
 
 function getTutorialKeyGroups(lesson) {
@@ -1141,23 +1180,33 @@ function KeyChips({ keys, copy }) {
   );
 }
 
-function HandOutline({ side }) {
-  const transform = side === "right" ? "scale(-1 1) translate(-240 0)" : undefined;
+function KeypressFrame({ keys, copy, frameIndex }) {
+  const visibleKeys = keys.length ? keys : [" "];
   return (
-    <svg className="hand-outline" viewBox="0 0 240 170" role="img" aria-hidden="true">
-      <g transform={transform}>
-        <path className="palm-line" d="M78 88c0 42 26 65 64 65 31 0 55-20 55-51V83" />
-        <path className="finger-line" d="M79 93V47c0-9 7-16 16-16s16 7 16 16v48" />
-        <path className="finger-line" d="M111 91V31c0-9 7-16 16-16s16 7 16 16v64" />
-        <path className="finger-line" d="M143 94V39c0-9 7-16 16-16s16 7 16 16v62" />
-        <path className="finger-line" d="M175 103V56c0-8 6-14 14-14s14 6 14 14v48" />
-        <path className="thumb-line" d="M77 111 52 90c-8-7-20-1-18 10 2 12 17 25 31 39 14 13 31 21 51 21" />
-        <circle className="joint-dot" cx="95" cy="56" r="3" />
-        <circle className="joint-dot" cx="127" cy="45" r="3" />
-        <circle className="joint-dot" cx="159" cy="53" r="3" />
-        <circle className="joint-dot" cx="189" cy="69" r="3" />
-      </g>
-    </svg>
+    <div className={`keypress-frame frame-${frameIndex}`} style={{ "--key-count": visibleKeys.length }}>
+      <div className="frame-hand" aria-hidden="true">
+        {visibleKeys.map((key, index) => (
+          <span className="frame-finger" style={{ "--finger-index": index }} key={`${key}-${index}`} />
+        ))}
+      </div>
+      <div className="frame-keyboard" aria-hidden="true">
+        {visibleKeys.map((key, index) => (
+          <span className="frame-key active" key={`${key}-${index}`}>
+            {formatKey(key, copy)}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function KeypressFrames({ keys, copy }) {
+  return (
+    <div className="keypress-frames" aria-hidden="true">
+      {[0, 1, 2].map((frameIndex) => (
+        <KeypressFrame keys={keys} copy={copy} frameIndex={frameIndex} key={frameIndex} />
+      ))}
+    </div>
   );
 }
 
@@ -1169,13 +1218,13 @@ function FingerTutorialContent({ lesson, copy }) {
       <p>{lesson.tutorial.lead}</p>
       <div className="hand-diagram-grid">
         <div className="hand-card">
-          <HandOutline side="left" />
+          <KeypressFrames keys={leftKeys} copy={copy} />
           <KeyChips keys={leftKeys} copy={copy} />
           <strong>{lesson.tutorial.left}</strong>
           <span>{lesson.tutorial.leftLabel}</span>
         </div>
         <div className="hand-card">
-          <HandOutline side="right" />
+          <KeypressFrames keys={rightKeys} copy={copy} />
           <KeyChips keys={rightKeys} copy={copy} />
           <strong>{lesson.tutorial.right}</strong>
           <span>{lesson.tutorial.rightLabel}</span>
@@ -1202,6 +1251,7 @@ function FingerTutorialModal({ lesson, copy, onClose }) {
 }
 
 function VisualKeyboard({ keyboardRows, expectedKey, lessonKeys, lastKey, lastResult, copy, keyboardMeta }) {
+  const normalizedLessonKeys = lessonKeys.map(normalizeKey);
   return (
     <div className="keyboard-panel" aria-label={copy.visualKeyboard}>
       <div className="keyboard-meta">
@@ -1212,11 +1262,14 @@ function VisualKeyboard({ keyboardRows, expectedKey, lessonKeys, lastKey, lastRe
         {keyboardRows.map((row, rowIndex) => (
           <div className={`keyboard-row row-${rowIndex}`} key={row.join("")} style={{ "--key-count": row.length }}>
             {row.map((key) => {
+              const normalizedKey = normalizeKey(key);
+              const normalizedExpectedKey = normalizeKey(expectedKey);
+              const normalizedLastKey = normalizeKey(lastKey);
               const keyClasses = [
                 "keycap",
-                lessonKeys.includes(key) ? "lesson-key" : "",
-                key === expectedKey ? "expected" : "",
-                key === lastKey ? lastResult : "",
+                normalizedLessonKeys.includes(normalizedKey) ? "lesson-key" : "",
+                normalizedKey === normalizedExpectedKey ? "expected" : "",
+                normalizedKey === normalizedLastKey ? lastResult : "",
                 key === "f" || key === "j" || key === "ֆ" || key === "յ" ? "home-anchor" : "",
               ].join(" ");
               return (
