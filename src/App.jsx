@@ -1352,7 +1352,7 @@ function PracticeSurface({
             <button className="icon-button" type="button" onClick={() => onMoveLesson(-1)} disabled={lessonIndex === 0} aria-label={copy.previousLesson} title={copy.previousLesson}>
               <Icon name="chevronLeft" />
             </button>
-            <button className="primary-button" type="button" onClick={isRunning || isArmed ? onPause : onStart}>
+            <button className="primary-button" type="button" onClick={isRunning ? onPause : onStart}>
               <Icon name={buttonIcon} />
               {buttonText}
             </button>
@@ -1488,7 +1488,7 @@ export default function App() {
   const [bestStreak, setBestStreak] = useState(0);
   const [startedAt, setStartedAt] = useState(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [isArmed, setIsArmed] = useState(false);
+  const [isArmed, setIsArmed] = useState(true);
   const [isRunning, setIsRunning] = useState(false);
   const [lastKey, setLastKey] = useState(null);
   const [lastResult, setLastResult] = useState("idle");
@@ -1556,7 +1556,7 @@ export default function App() {
     return nextPrompt.text;
   }, []);
 
-  const resetRound = useCallback((nextLessonIndex = lessonIndex, shouldArm = false) => {
+  const resetRound = useCallback((nextLessonIndex = lessonIndex, shouldArm = true) => {
     const nextLesson = LESSON_SETS[language][nextLessonIndex];
     prepareSpeedPrompt(nextLesson);
     speedFinishInProgressRef.current = false;
@@ -1601,11 +1601,11 @@ export default function App() {
   }, [lessonIndex, resetRound]);
 
   const chooseLesson = useCallback((index) => {
-    resetRound(index, false);
+    resetRound(index, true);
   }, [resetRound]);
 
   const moveLesson = useCallback((direction) => {
-    resetRound(clamp(lessonIndex + direction, 0, lessons.length - 1), false);
+    resetRound(clamp(lessonIndex + direction, 0, lessons.length - 1), true);
   }, [lessonIndex, lessons.length, resetRound]);
 
   const changeLanguage = useCallback((nextLanguage) => {
@@ -1619,7 +1619,7 @@ export default function App() {
     setBestStreak(0);
     setElapsedSeconds(0);
     setStartedAt(null);
-    setIsArmed(false);
+    setIsArmed(true);
     setIsRunning(false);
     setLastKey(null);
     setLastResult("idle");
@@ -1813,7 +1813,7 @@ export default function App() {
         stats={completionStats}
         copy={copy}
         hasNextLesson={lessonIndex < lessons.length - 1}
-        onNextLesson={() => resetRound(clamp(lessonIndex + 1, 0, lessons.length - 1), false)}
+        onNextLesson={() => resetRound(clamp(lessonIndex + 1, 0, lessons.length - 1), true)}
         onPracticeAgain={() => resetRound(lessonIndex, true)}
         onClose={() => setCompletionStats(null)}
       />
