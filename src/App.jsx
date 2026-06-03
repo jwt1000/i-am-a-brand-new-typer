@@ -879,6 +879,14 @@ const ICON_PATHS = {
       <path d="M7 9h.01M11 9h.01M15 9h.01M19 9h.01M7 13h.01M11 13h.01M15 13h.01M19 13h.01M8 17h8" />
     </>
   ),
+  hand: (
+    <>
+      <path d="M8 21V11a2 2 0 0 1 4 0v7" />
+      <path d="M12 18V8a2 2 0 1 1 4 0v10" />
+      <path d="M16 18v-6a2 2 0 1 1 4 0v7" />
+      <path d="M8 13H6a2 2 0 0 0-2 2v1c0 3 2 5 5 5h7a4 4 0 0 0 4-4v-1" />
+    </>
+  ),
   pause: <path d="M8 5v14M16 5v14" />,
   play: <path d="m8 5 11 7-11 7z" />,
   restart: (
@@ -1108,14 +1116,24 @@ function LessonRail({ language, lessons, lessonIndex, progress, copy, onChooseLe
 
 function PromptPanel({ lesson, promptText, position, completion, lastKey, lastResult, statusMessage, copy }) {
   const currentCharRef = useRef(null);
-  const promptChars = useMemo(
-    () =>
-      promptText.split("").map((char, index) => ({
-        char,
-        status: index < position ? "done" : index === position ? "current" : "waiting",
-      })),
-    [promptText, position]
-  );
+  const promptWordGroups = useMemo(() => {
+    let charIndex = 0;
+    const groups = promptText.match(/\S+\s*|\s+/g) || [];
+
+    return groups.map((group, groupIndex) => {
+      const chars = group.split("").map((char) => {
+        const index = charIndex;
+        charIndex += 1;
+        return {
+          char,
+          index,
+          status: index < position ? "done" : index === position ? "current" : "waiting",
+        };
+      });
+
+      return { id: `${groupIndex}-${chars[0]?.index || 0}`, chars };
+    });
+  }, [promptText, position]);
 
   useEffect(() => {
     currentCharRef.current?.scrollIntoView({ block: "center", inline: "nearest" });
@@ -1127,9 +1145,13 @@ function PromptPanel({ lesson, promptText, position, completion, lastKey, lastRe
         <span style={{ width: `${completion}%` }} />
       </div>
       <div className="typing-line" aria-label={lesson.goal}>
-        {promptChars.map((item, index) => (
-          <span className={`prompt-char ${item.status} ${item.char === " " ? "space" : ""}`} key={`${index}-${item.char}`} ref={item.status === "current" ? currentCharRef : undefined}>
-            {item.char === " " ? "\u00a0" : item.char}
+        {promptWordGroups.map((group) => (
+          <span className="prompt-word" key={group.id}>
+            {group.chars.map((item) => (
+              <span className={`prompt-char ${item.status} ${item.char === " " ? "space" : ""}`} key={`${item.index}-${item.char}`} ref={item.status === "current" ? currentCharRef : undefined}>
+                {item.char === " " ? "\u00a0" : item.char}
+              </span>
+            ))}
           </span>
         ))}
       </div>
@@ -1141,81 +1163,146 @@ function PromptPanel({ lesson, promptText, position, completion, lastKey, lastRe
   );
 }
 
-function tutorialKeysFromText(keys, text) {
-  const sourceTokens = text.toLocaleLowerCase().match(/shift|[\p{L}\p{N}]+|[;,.\/'-]/gu) || [];
-  return keys.filter((key) => key.trim() && sourceTokens.includes(key.toLocaleLowerCase()));
+function getFingerForKey(key, keyboardRows) {
+  const normalizedTarget = normalizeKey(key);
+  for (let rowIndex = 0; rowIndex < keyboardRows.length; rowIndex += 1) {
+    const row = keyboardRows[rowIndex];
+    const columnIndex = row.findIndex((item) => normalizeKey(item) === normalizedTarget);
+    if (columnIndex === -1) continue;
+
+    const ratio = columnIndex / Math.max(row.length - 1, 1);
+    if (ratio < 0.14) return "left-pinky";
+    if (ratio < 0.28) return "left-ring";
+    if (ratio < 0.4) return "left-middle";
+    if (ratio < 0.5) return "left-index";
+    if (ratio < 0.62) return "right-index";
+    if (ratio < 0.74) return "right-middle";
+    if (ratio < 0.86) return "right-ring";
+    return "right-pinky";
+  }
+
+  return "left-index";
 }
 
-function getTutorialKeyGroups(lesson) {
-  const leftKeys = tutorialKeysFromText(lesson.keys, lesson.tutorial.left);
-  const rightKeys = tutorialKeysFromText(lesson.keys, lesson.tutorial.right);
-  if (leftKeys.length || rightKeys.length) return { leftKeys, rightKeys };
+function makeKey(label, value = label, span = 1, className = "") {
+  return { label, value, span, className };
+}
 
-  const midpoint = Math.ceil(lesson.keys.length / 2);
+function buildEnglishDiagramRows() {
   return {
-    leftKeys: lesson.keys.slice(0, midpoint),
-    rightKeys: lesson.keys.slice(midpoint),
+    columns: 16,
+    rows: [
+      ["~", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "+", makeKey("Backspace", "Backspace", 3, "wide-key")],
+      [makeKey("Tab", "Tab", 2, "wide-key"), "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "{", "}", "\\", makeKey("", "", 1, "ghost-key")],
+      [makeKey("CapsLock", "CapsLock", 2, "wide-key"), "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", makeKey("Enter", "Enter", 4, "wide-key")],
+      [makeKey("Shift", "Shift", 2, "wide-key"), "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", makeKey("Shift", "Shift", 5, "wide-key")],
+      [makeKey("", "", 4, "ghost-key"), makeKey("Space", " ", 8, "wide-key"), makeKey("", "", 4, "ghost-key")],
+    ],
   };
 }
 
-function KeyChips({ keys, copy }) {
-  return (
-    <div className="touch-keys">
-      {keys.map((key) => (
-        <span className="touch-key" key={key}>
-          {formatKey(key, copy)}
-        </span>
-      ))}
-    </div>
-  );
+function buildArmenianDiagramRows(keyboardRows) {
+  const columns = Math.max(...keyboardRows.map((row) => row.length)) + 4;
+  return {
+    columns,
+    rows: [
+      [...keyboardRows[0], makeKey("Backspace", "Backspace", 3, "wide-key")],
+      [makeKey("Tab", "Tab", 2, "wide-key"), ...keyboardRows[1]],
+      [makeKey("CapsLock", "CapsLock", 2, "wide-key"), ...keyboardRows[2], makeKey("Enter", "Enter", 2, "wide-key")],
+      [makeKey("Shift", "Shift", 2, "wide-key"), ...keyboardRows[3], makeKey("Shift", "Shift", 2, "wide-key")],
+      [makeKey("", "", Math.max(2, Math.floor(columns / 4)), "ghost-key"), makeKey("Space", " ", Math.max(6, Math.floor(columns / 2)), "wide-key")],
+    ],
+  };
 }
 
-function KeypressFrame({ keys, copy, frameIndex }) {
-  const visibleKeys = keys.length ? keys : [" "];
+function getDiagramLayout(keyboardRows) {
+  return keyboardRows.length === 3 ? buildEnglishDiagramRows() : buildArmenianDiagramRows(keyboardRows);
+}
+
+function flattenDiagramKeys(rows) {
+  const keys = [];
+  rows.forEach((row, rowIndex) => {
+    let column = 1;
+    row.forEach((rawKey) => {
+      const key = typeof rawKey === "string" ? makeKey(rawKey) : rawKey;
+      keys.push({ ...key, rowIndex, column });
+      column += key.span || 1;
+    });
+  });
+  return keys;
+}
+
+function getTouchPoint(diagramKeys, expectedKey, columns) {
+  const target = normalizeKey(expectedKey);
+  const key = diagramKeys.find((item) => normalizeKey(item.value) === target) || diagramKeys.find((item) => item.value && !item.className?.includes("ghost-key"));
+  if (!key) return { x: 50, y: 38 };
+
+  const x = ((key.column - 1 + (key.span || 1) / 2) / columns) * 100;
+  const rowY = [11, 27, 43, 59, 76][key.rowIndex] || 43;
+  return { x, y: rowY };
+}
+
+function PlacementKeyboardDiagram({ lesson, expectedKey, keyboardRows, copy }) {
+  const diagram = getDiagramLayout(keyboardRows);
+  const diagramKeys = flattenDiagramKeys(diagram.rows);
+  const touchPoint = getTouchPoint(diagramKeys, expectedKey || lesson.keys[0], diagram.columns);
+  const lessonKeySet = new Set(lesson.keys.map(normalizeKey));
+  const activeFinger = getFingerForKey(expectedKey || lesson.keys[0], keyboardRows);
+
   return (
-    <div className={`keypress-frame frame-${frameIndex}`} style={{ "--key-count": visibleKeys.length }}>
-      <div className="frame-hand" aria-hidden="true">
-        {visibleKeys.map((key, index) => (
-          <span className="frame-finger" style={{ "--finger-index": index }} key={`${key}-${index}`} />
+    <div className="placement-diagram" style={{ "--touch-x": `${touchPoint.x}%`, "--touch-y": `${touchPoint.y}%` }}>
+      <div className="placement-keyboard" style={{ "--diagram-cols": diagram.columns }}>
+        {diagram.rows.map((row, rowIndex) => (
+          <div className={`placement-row row-${rowIndex}`} key={`row-${rowIndex}`}>
+            {row.map((rawKey, keyIndex) => {
+              const key = typeof rawKey === "string" ? makeKey(rawKey) : rawKey;
+              const normalizedValue = normalizeKey(key.value);
+              const keyClasses = [
+                "placement-key",
+                key.className,
+                lessonKeySet.has(normalizedValue) ? "lesson-touch" : "",
+                normalizedValue && normalizedValue === normalizeKey(expectedKey) ? "expected-touch" : "",
+              ].join(" ");
+
+              return (
+                <span className={keyClasses} style={{ gridColumn: `span ${key.span || 1}` }} key={`${rowIndex}-${keyIndex}-${key.label}`}>
+                  {key.value === " " ? copy.space : key.label}
+                </span>
+              );
+            })}
+          </div>
         ))}
       </div>
-      <div className="frame-keyboard" aria-hidden="true">
-        {visibleKeys.map((key, index) => (
-          <span className="frame-key active" key={`${key}-${index}`}>
-            {formatKey(key, copy)}
-          </span>
-        ))}
-      </div>
+      <svg className={`hand-outline-svg active-${activeFinger}`} viewBox="0 0 1000 420" aria-hidden="true">
+        <path className="palm-outline left-hand-outline" d="M70 418V212C70 169 102 139 142 139c24 0 41 9 52 25 9-28 32-45 63-45 29 0 51 15 62 40 13-18 34-29 61-29 35 0 60 23 67 57 13-15 31-23 53-23 37 0 63 29 63 70v184" />
+        <path className="palm-outline right-hand-outline" d="M930 418V212c0-43-32-73-72-73-24 0-41 9-52 25-9-28-32-45-63-45-29 0-51 15-62 40-13-18-34-29-61-29-35 0-60 23-67 57-13-15-31-23-53-23-37 0-63 29-63 70v184" />
+        <path className="finger-outline left-pinky" d="M142 326V187" />
+        <path className="finger-outline left-ring" d="M255 320V144" />
+        <path className="finger-outline left-middle" d="M355 315V130" />
+        <path className="finger-outline left-index" d="M460 306V160" />
+        <path className="finger-outline right-index" d="M540 306V160" />
+        <path className="finger-outline right-middle" d="M645 315V130" />
+        <path className="finger-outline right-ring" d="M745 320V144" />
+        <path className="finger-outline right-pinky" d="M858 326V187" />
+      </svg>
+      <span className={`finger-touch-line ${activeFinger}`} aria-hidden="true" />
+      <span className="touch-dot" aria-hidden="true" />
     </div>
   );
 }
 
-function KeypressFrames({ keys, copy }) {
-  return (
-    <div className="keypress-frames" aria-hidden="true">
-      {[0, 1, 2].map((frameIndex) => (
-        <KeypressFrame keys={keys} copy={copy} frameIndex={frameIndex} key={frameIndex} />
-      ))}
-    </div>
-  );
-}
-
-function FingerTutorialContent({ lesson, copy }) {
-  const { leftKeys, rightKeys } = getTutorialKeyGroups(lesson);
+function FingerTutorialContent({ lesson, copy, expectedKey, keyboardRows }) {
   return (
     <div className="finger-tutorial-content">
       <span className="difficulty-pill">{lesson.difficulty}</span>
       <p>{lesson.tutorial.lead}</p>
+      <PlacementKeyboardDiagram lesson={lesson} expectedKey={expectedKey} keyboardRows={keyboardRows} copy={copy} />
       <div className="hand-diagram-grid">
         <div className="hand-card">
-          <KeypressFrames keys={leftKeys} copy={copy} />
-          <KeyChips keys={leftKeys} copy={copy} />
           <strong>{lesson.tutorial.left}</strong>
           <span>{lesson.tutorial.leftLabel}</span>
         </div>
         <div className="hand-card">
-          <KeypressFrames keys={rightKeys} copy={copy} />
-          <KeyChips keys={rightKeys} copy={copy} />
           <strong>{lesson.tutorial.right}</strong>
           <span>{lesson.tutorial.rightLabel}</span>
         </div>
@@ -1225,7 +1312,7 @@ function FingerTutorialContent({ lesson, copy }) {
   );
 }
 
-function FingerTutorialModal({ lesson, copy, onClose }) {
+function FingerTutorialModal({ lesson, copy, expectedKey, keyboardRows, onClose }) {
   return (
     <div className="modal-backdrop" role="presentation">
       <section className="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
@@ -1234,7 +1321,7 @@ function FingerTutorialModal({ lesson, copy, onClose }) {
         </button>
         <p className="lesson-label">{lesson.title}</p>
         <h2 id="tutorial-title">{copy.tutorialTitle}</h2>
-        <FingerTutorialContent lesson={lesson} copy={copy} />
+        <FingerTutorialContent lesson={lesson} copy={copy} expectedKey={expectedKey} keyboardRows={keyboardRows} />
       </section>
     </div>
   );
@@ -1301,6 +1388,7 @@ function PracticeSurface({
   onPause,
   onRestart,
   onMoveLesson,
+  onOpenTutorial,
   onLanguageChange,
   onArmenianKeyboardLayoutChange,
 }) {
@@ -1349,6 +1437,9 @@ function PracticeSurface({
           <LanguageSwitcher language={language} copy={copy} onLanguageChange={onLanguageChange} />
           {language === "hy" ? <ArmenianKeyboardSwitcher keyboardLayout={armenianKeyboardLayout} copy={copy} onKeyboardLayoutChange={onArmenianKeyboardLayoutChange} /> : null}
           <div className="topbar-actions">
+            <button className="icon-button" type="button" onClick={onOpenTutorial} aria-label={copy.tutorialTitle} title={copy.tutorialTitle}>
+              <Icon name="hand" />
+            </button>
             <button className="icon-button" type="button" onClick={() => onMoveLesson(-1)} disabled={lessonIndex === 0} aria-label={copy.previousLesson} title={copy.previousLesson}>
               <Icon name="chevronLeft" />
             </button>
@@ -1494,6 +1585,7 @@ export default function App() {
   const [lastResult, setLastResult] = useState("idle");
   const [progress, setProgress] = useState(loadProgress);
   const [completionStats, setCompletionStats] = useState(null);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [speedText, setSpeedText] = useState("");
   const appRef = useRef(null);
   const runtimeRef = useRef(null);
@@ -1573,6 +1665,7 @@ export default function App() {
     setLastKey(null);
     setLastResult("idle");
     setCompletionStats(null);
+    setShowTutorial(false);
     window.requestAnimationFrame(() => appRef.current?.focus());
   }, [language, lessonIndex, prepareSpeedPrompt]);
 
@@ -1588,6 +1681,7 @@ export default function App() {
     setLastKey(null);
     setLastResult("idle");
     setCompletionStats(null);
+    setShowTutorial(false);
     window.requestAnimationFrame(() => appRef.current?.focus());
   }, [lesson, prepareSpeedPrompt, speedText]);
 
@@ -1625,10 +1719,12 @@ export default function App() {
     setLastResult("idle");
     setCompletionStats(null);
     setSpeedText("");
+    setShowTutorial(false);
   }, []);
 
   const changeArmenianKeyboardLayout = useCallback((nextLayout) => {
     setArmenianKeyboardLayout(nextLayout === "legacy" ? "legacy" : "regular");
+    setShowTutorial(false);
   }, []);
 
   const completeLesson = useCallback((finishedLanguage, finishedLesson, finalCorrectCount, finalErrors, finalElapsedSeconds, finalPosition, finalBestStreak, targetTextOverride = "") => {
@@ -1695,6 +1791,7 @@ export default function App() {
 
   useEffect(() => {
     function handleKeyDown(event) {
+      if (showTutorial) return;
       const snapshot = runtimeRef.current;
       if (!snapshot?.isArmed && !snapshot?.isRunning) return;
       if (event.ctrlKey || event.metaKey || event.altKey) return;
@@ -1777,7 +1874,7 @@ export default function App() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [completeLesson, resetRound]);
+  }, [completeLesson, resetRound, showTutorial]);
 
   return (
     <main className={`app-shell language-${language}`} tabIndex="-1" ref={appRef}>
@@ -1805,10 +1902,23 @@ export default function App() {
         onPause={pauseLesson}
         onRestart={restartLesson}
         onMoveLesson={moveLesson}
+        onOpenTutorial={() => setShowTutorial(true)}
         onLanguageChange={changeLanguage}
         onArmenianKeyboardLayoutChange={changeArmenianKeyboardLayout}
       />
       <ProgressPanel language={language} lessons={lessons} progress={progress} lesson={lesson} bestStreak={bestStreak} copy={copy} armenianKeyboardLayout={armenianKeyboardLayout} />
+      {showTutorial ? (
+        <FingerTutorialModal
+          lesson={lesson}
+          copy={copy}
+          expectedKey={lessonText[position] || lessonText[0] || lesson.keys[0]}
+          keyboardRows={keyboardRows}
+          onClose={() => {
+            setShowTutorial(false);
+            window.requestAnimationFrame(() => appRef.current?.focus());
+          }}
+        />
+      ) : null}
       <CompletionModal
         stats={completionStats}
         copy={copy}

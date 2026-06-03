@@ -66,9 +66,9 @@ svg {
 .app-shell {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr) 310px;
-  gap: 22px;
+  gap: 14px;
   min-height: 100vh;
-  padding: 22px;
+  padding: 18px;
   outline: none;
 }
 
@@ -414,6 +414,146 @@ svg {
   font-size: 0.95rem;
 }
 
+.placement-diagram {
+  position: relative;
+  min-height: 430px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(249, 251, 250, 0.96) 62%, rgba(255, 255, 255, 0.86) 100%),
+    radial-gradient(circle at 50% 74%, rgba(23, 33, 31, 0.06), transparent 42%);
+}
+
+.placement-keyboard {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  padding: 22px 22px 0;
+}
+
+.placement-row {
+  display: grid;
+  grid-template-columns: repeat(var(--diagram-cols), minmax(0, 1fr));
+  gap: 4px;
+}
+
+.placement-key {
+  display: grid;
+  min-height: 38px;
+  place-items: center;
+  border: 1px solid #cbd4d0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 1px 2px rgba(23, 33, 31, 0.08);
+  color: #26302d;
+  font-size: clamp(0.54rem, 1.15vw, 0.78rem);
+  font-weight: 760;
+  line-height: 1;
+  text-align: center;
+}
+
+.placement-key.lesson-touch {
+  border-color: #dac174;
+  background: var(--yellow-soft);
+  color: #5a4200;
+}
+
+.placement-key.expected-touch {
+  border-color: var(--yellow);
+  background: #f6c654;
+  box-shadow: 0 0 0 2px rgba(246, 198, 84, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  color: #3b2a00;
+}
+
+.placement-key.ghost-key {
+  border-color: rgba(217, 227, 223, 0.55);
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: none;
+  color: transparent;
+}
+
+.hand-outline-svg {
+  position: absolute;
+  z-index: 2;
+  right: 2%;
+  bottom: -24px;
+  left: 2%;
+  width: 96%;
+  height: 77%;
+  color: rgba(23, 33, 31, 0.24);
+  pointer-events: none;
+}
+
+.palm-outline,
+.finger-outline {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.palm-outline {
+  stroke-width: 9;
+}
+
+.finger-outline {
+  stroke-width: 7;
+}
+
+.finger-touch-line {
+  position: absolute;
+  z-index: 3;
+  left: var(--touch-x);
+  top: calc(var(--touch-y) + 10%);
+  width: clamp(22px, 5vw, 42px);
+  height: 175px;
+  border: 4px solid rgba(23, 33, 31, 0.26);
+  border-top-color: rgba(23, 33, 31, 0.5);
+  border-radius: 999px 999px 24px 24px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.66), rgba(245, 248, 247, 0.42));
+  box-shadow: inset 0 -18px 0 rgba(23, 33, 31, 0.04);
+  pointer-events: none;
+  transform: translate(-50%, 0) rotate(var(--finger-tilt, -2deg));
+  transform-origin: center top;
+}
+
+.finger-touch-line.left-pinky,
+.finger-touch-line.left-ring,
+.finger-touch-line.left-middle {
+  --finger-tilt: -10deg;
+}
+
+.finger-touch-line.left-index {
+  --finger-tilt: -4deg;
+}
+
+.finger-touch-line.right-index {
+  --finger-tilt: 4deg;
+}
+
+.finger-touch-line.right-middle,
+.finger-touch-line.right-ring,
+.finger-touch-line.right-pinky {
+  --finger-tilt: 10deg;
+}
+
+.touch-dot {
+  position: absolute;
+  z-index: 4;
+  left: var(--touch-x);
+  top: var(--touch-y);
+  width: 26px;
+  height: 26px;
+  border: 2px solid #bd8b00;
+  border-radius: 999px;
+  background: rgba(246, 198, 84, 0.52);
+  box-shadow: 0 0 0 8px rgba(246, 198, 84, 0.18);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
 .hand-diagram-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -422,106 +562,11 @@ svg {
 
 .hand-card {
   display: grid;
-  gap: 9px;
+  gap: 6px;
   align-content: start;
   padding: 14px;
   border-radius: 7px;
   background: var(--surface-strong);
-}
-
-.keypress-frames {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.keypress-frame {
-  position: relative;
-  min-height: 132px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  background: linear-gradient(180deg, #ffffff 0%, #edf4f1 100%);
-  perspective: 520px;
-}
-
-.frame-keyboard {
-  position: absolute;
-  right: 8px;
-  bottom: 14px;
-  left: 8px;
-  display: grid;
-  grid-template-columns: repeat(var(--key-count, 2), minmax(0, 1fr));
-  gap: 5px;
-  transform: rotateX(58deg) rotateZ(-8deg);
-  transform-origin: center bottom;
-}
-
-.frame-key {
-  display: grid;
-  min-height: 34px;
-  place-items: center;
-  border: 1px solid #dac174;
-  border-radius: 6px;
-  background: var(--yellow-soft);
-  box-shadow: 0 8px 0 #d1bb70, 0 14px 14px rgba(23, 33, 31, 0.14);
-  color: #5a4200;
-  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
-  font-size: 0.8rem;
-  font-weight: 860;
-}
-
-.frame-hand {
-  position: absolute;
-  inset: 12px 8px 38px;
-  display: grid;
-  grid-template-columns: repeat(var(--key-count, 2), minmax(0, 1fr));
-  gap: 5px;
-  transform: rotateX(52deg) rotateZ(-8deg);
-  transform-origin: center bottom;
-}
-
-.frame-finger {
-  display: block;
-  min-width: 16px;
-  height: 86px;
-  justify-self: center;
-  border: 3px solid var(--ink);
-  border-radius: 999px 999px 15px 15px;
-  background: linear-gradient(90deg, #ffffff 0%, #f4f8f6 54%, #dfe7e4 100%);
-  box-shadow: inset 0 -10px 0 rgba(23, 33, 31, 0.08), 0 10px 18px rgba(23, 33, 31, 0.12);
-  transform: translateY(calc(2px + var(--finger-index) * 2px));
-}
-
-.frame-1 .frame-finger {
-  transform: translateY(calc(18px + var(--finger-index) * 2px));
-}
-
-.frame-2 .frame-finger {
-  transform: translateY(calc(34px + var(--finger-index) * 2px));
-}
-
-.frame-2 .frame-key {
-  box-shadow: 0 3px 0 #d1bb70, 0 8px 10px rgba(23, 33, 31, 0.12);
-  transform: translateY(5px);
-}
-
-.touch-keys {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.touch-key {
-  min-width: 34px;
-  padding: 7px 9px;
-  border: 1px solid var(--yellow);
-  border-radius: 7px;
-  background: var(--yellow-soft);
-  color: #5a4200;
-  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
-  font-weight: 860;
-  text-align: center;
 }
 
 .hand-card strong {
@@ -584,7 +629,7 @@ svg {
 .prompt-panel {
   display: grid;
   gap: 12px;
-  padding: clamp(10px, 2vw, 18px) clamp(16px, 3vw, 28px) clamp(16px, 3vw, 28px);
+  padding: clamp(8px, 1.5vw, 14px) clamp(8px, 1.5vw, 14px) clamp(14px, 2.5vw, 22px);
 }
 
 .progress-track {
@@ -606,7 +651,7 @@ svg {
   overflow-y: auto;
   min-height: 164px;
   max-height: 260px;
-  padding: 18px;
+  padding: 12px 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fbfdfc;
@@ -615,7 +660,13 @@ svg {
   font-size: clamp(2rem, 5vw, 4.1rem);
   font-weight: 700;
   line-height: 1.45;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.prompt-word {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .prompt-char {
@@ -1063,7 +1114,7 @@ svg {
 
   .topbar-actions {
     display: grid;
-    grid-template-columns: 42px minmax(0, 1fr) 42px 42px;
+    grid-template-columns: 42px 42px minmax(0, 1fr) 42px 42px;
     width: 100%;
   }
 
@@ -1081,10 +1132,6 @@ svg {
 
   .keyboard-layout-options button {
     width: auto;
-  }
-
-  .keypress-frames {
-    grid-template-columns: 1fr;
   }
 
   .primary-button {
