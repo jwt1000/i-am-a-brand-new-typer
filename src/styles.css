@@ -364,230 +364,6 @@ svg {
   padding: 10px;
 }
 
-.finger-tutorial-content {
-  display: grid;
-  gap: 14px;
-}
-
-.tutorial-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.tutorial-heading h3,
-.finger-tutorial-content p {
-  margin: 0;
-}
-
-.tutorial-heading h3 {
-  font-size: 1.05rem;
-  font-weight: 840;
-  line-height: 1.2;
-}
-
-.tutorial-heading span {
-  flex: 0 0 auto;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: var(--yellow-soft);
-  color: #604603;
-  font-size: 0.76rem;
-  font-weight: 820;
-  text-transform: uppercase;
-}
-
-.difficulty-pill {
-  justify-self: start;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: var(--yellow-soft);
-  color: #604603;
-  font-size: 0.76rem;
-  font-weight: 820;
-  text-transform: uppercase;
-}
-
-.finger-tutorial-content p {
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-
-.placement-diagram {
-  position: relative;
-  min-height: 430px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(249, 251, 250, 0.96) 62%, rgba(255, 255, 255, 0.86) 100%),
-    radial-gradient(circle at 50% 74%, rgba(23, 33, 31, 0.06), transparent 42%);
-}
-
-.placement-keyboard {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 4px;
-  padding: 22px 22px 0;
-}
-
-.placement-row {
-  display: grid;
-  grid-template-columns: repeat(var(--diagram-cols), minmax(0, 1fr));
-  gap: 4px;
-}
-
-.placement-key {
-  display: grid;
-  min-height: 38px;
-  place-items: center;
-  border: 1px solid #cbd4d0;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 1px 2px rgba(23, 33, 31, 0.08);
-  color: #26302d;
-  font-size: clamp(0.54rem, 1.15vw, 0.78rem);
-  font-weight: 760;
-  line-height: 1;
-  text-align: center;
-}
-
-.placement-key.lesson-touch {
-  border-color: #dac174;
-  background: var(--yellow-soft);
-  color: #5a4200;
-}
-
-.placement-key.expected-touch {
-  border-color: var(--yellow);
-  background: #f6c654;
-  box-shadow: 0 0 0 2px rgba(246, 198, 84, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.65);
-  color: #3b2a00;
-}
-
-.placement-key.ghost-key {
-  border-color: rgba(217, 227, 223, 0.55);
-  background: rgba(255, 255, 255, 0.28);
-  box-shadow: none;
-  color: transparent;
-}
-
-.hand-outline-svg {
-  position: absolute;
-  z-index: 2;
-  right: 2%;
-  bottom: -24px;
-  left: 2%;
-  width: 96%;
-  height: 77%;
-  color: rgba(23, 33, 31, 0.24);
-  pointer-events: none;
-}
-
-.palm-outline,
-.finger-outline {
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.palm-outline {
-  stroke-width: 9;
-}
-
-.finger-outline {
-  stroke-width: 7;
-}
-
-.finger-touch-line {
-  position: absolute;
-  z-index: 3;
-  left: var(--touch-x);
-  top: calc(var(--touch-y) + 10%);
-  width: clamp(22px, 5vw, 42px);
-  height: 175px;
-  border: 4px solid rgba(23, 33, 31, 0.26);
-  border-top-color: rgba(23, 33, 31, 0.5);
-  border-radius: 999px 999px 24px 24px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.66), rgba(245, 248, 247, 0.42));
-  box-shadow: inset 0 -18px 0 rgba(23, 33, 31, 0.04);
-  pointer-events: none;
-  transform: translate(-50%, 0) rotate(var(--finger-tilt, -2deg));
-  transform-origin: center top;
-}
-
-.finger-touch-line.left-pinky,
-.finger-touch-line.left-ring,
-.finger-touch-line.left-middle {
-  --finger-tilt: -10deg;
-}
-
-.finger-touch-line.left-index {
-  --finger-tilt: -4deg;
-}
-
-.finger-touch-line.right-index {
-  --finger-tilt: 4deg;
-}
-
-.finger-touch-line.right-middle,
-.finger-touch-line.right-ring,
-.finger-touch-line.right-pinky {
-  --finger-tilt: 10deg;
-}
-
-.touch-dot {
-  position: absolute;
-  z-index: 4;
-  left: var(--touch-x);
-  top: var(--touch-y);
-  width: 26px;
-  height: 26px;
-  border: 2px solid #bd8b00;
-  border-radius: 999px;
-  background: rgba(246, 198, 84, 0.52);
-  box-shadow: 0 0 0 8px rgba(246, 198, 84, 0.18);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-}
-
-.hand-diagram-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.hand-card {
-  display: grid;
-  gap: 6px;
-  align-content: start;
-  padding: 14px;
-  border-radius: 7px;
-  background: var(--surface-strong);
-}
-
-.hand-card strong {
-  color: var(--ink);
-  font-size: 0.98rem;
-  font-weight: 820;
-  line-height: 1.2;
-}
-
-.hand-card > span {
-  color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 760;
-  text-transform: uppercase;
-}
-
-.tutorial-reminder {
-  padding-left: 12px;
-  border-left: 3px solid var(--teal);
-}
-
 .metric {
   display: flex;
   align-items: center;
@@ -648,18 +424,19 @@ svg {
 }
 
 .typing-line {
-  overflow-y: auto;
-  min-height: 164px;
-  max-height: 260px;
+  --typing-font-size: clamp(1.75rem, 4.1vw, 3.45rem);
+  --typing-line-height: 1.28;
+  overflow: hidden;
+  height: calc((var(--typing-font-size) * var(--typing-line-height) * 3) + 26px);
   padding: 12px 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fbfdfc;
   color: var(--ink);
   font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
-  font-size: clamp(2rem, 5vw, 4.1rem);
+  font-size: var(--typing-font-size);
   font-weight: 700;
-  line-height: 1.45;
+  line-height: var(--typing-line-height);
   overflow-wrap: normal;
   word-break: normal;
 }
@@ -971,8 +748,7 @@ svg {
   background: rgba(23, 33, 31, 0.42);
 }
 
-.stats-modal,
-.tutorial-modal {
+.stats-modal {
   position: relative;
   display: grid;
   gap: 14px;
@@ -987,28 +763,18 @@ svg {
   width: min(560px, 100%);
 }
 
-.tutorial-modal {
-  width: min(760px, 100%);
-  max-height: min(90vh, 820px);
-  overflow-y: auto;
-}
-
 .stats-modal h2,
-.stats-modal p,
-.tutorial-modal h2,
-.tutorial-modal p {
+.stats-modal p {
   margin: 0;
 }
 
-.stats-modal h2,
-.tutorial-modal h2 {
+.stats-modal h2 {
   font-size: clamp(1.5rem, 4vw, 2.25rem);
   line-height: 1.05;
   font-weight: 860;
 }
 
-.stats-modal > p:not(.lesson-label),
-.tutorial-modal > p:not(.lesson-label) {
+.stats-modal > p:not(.lesson-label) {
   color: var(--muted);
 }
 
@@ -1087,13 +853,8 @@ svg {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .typing-line {
-    min-height: 132px;
-  }
-
   .feedback,
-  .keyboard-meta,
-  .tutorial-heading {
+  .keyboard-meta {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -1104,17 +865,16 @@ svg {
 }
 
 @media (max-width: 560px) {
-  .lesson-list,
-  .metrics-strip,
-  .hand-diagram-grid,
-  .modal-stats,
-  .summary-grid {
+.lesson-list,
+.metrics-strip,
+.modal-stats,
+.summary-grid {
     grid-template-columns: 1fr;
   }
 
   .topbar-actions {
     display: grid;
-    grid-template-columns: 42px 42px minmax(0, 1fr) 42px 42px;
+    grid-template-columns: 42px minmax(0, 1fr) 42px 42px;
     width: 100%;
   }
 

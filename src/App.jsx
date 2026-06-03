@@ -845,7 +845,7 @@ const COPY = {
 
 const STORAGE_KEY = "first-keys-progress-v2";
 const LANGUAGE_STORAGE_KEY = "first-keys-language";
-const ARMENIAN_KEYBOARD_STORAGE_KEY = "first-keys-armenian-keyboard-layout";
+const ARMENIAN_KEYBOARD_STORAGE_KEY = "first-keys-armenian-keyboard-layout-v2";
 const EMPTY_PROGRESS = {};
 const ARMENIAN_KEYBOARD_ROWS = {
   regular: [
@@ -860,6 +860,485 @@ const ARMENIAN_KEYBOARD_ROWS = {
     ["ա", "ս", "դ", "ֆ", "ք", "հ", "ճ", "կ", "լ", "թ", "փ"],
     ["զ", "ց", "գ", "վ", "բ", "ն", "մ", "շ", "ղ", "ծ"],
   ],
+};
+const ARMENIAN_LAYOUT_CONFIGS = {
+  regular: {
+    id: "regular",
+    homeLeft: ["ա", "ս", "դ", "ֆ", "գ"],
+    homeRight: ["հ", "յ", "կ", "լ", "շ"],
+    leftIndex: "ֆ",
+    rightIndex: "յ",
+    leftMiddle: "դ",
+    rightMiddle: "կ",
+    leftRing: "ս",
+    rightRing: "լ",
+    lower: ["զ", "ղ", "ց", "վ", "բ", "ն", "մ"],
+    upper: ["ք", "ո", "ե", "ռ", "տ", "ը", "ւ", "ի", "օ", "պ", "խ", "ծ"],
+    top: ["է", "թ", "փ", "ձ", "ջ", "ւ", "և", "ր", "չ", "ճ", "ժ"],
+    topFocus: "Է Թ Փ Ձ Ջ Ւ ԵՎ Ր Չ Ճ Ժ",
+  },
+  legacy: {
+    id: "legacy",
+    homeLeft: ["ա", "ս", "դ", "ֆ", "ք"],
+    homeRight: ["հ", "ճ", "կ", "լ", "թ", "փ"],
+    leftIndex: "ֆ",
+    rightIndex: "ճ",
+    leftMiddle: "դ",
+    rightMiddle: "կ",
+    leftRing: "ս",
+    rightRing: "լ",
+    lower: ["զ", "ց", "գ", "վ", "բ", "ն", "մ", "շ", "ղ", "ծ"],
+    upper: ["խ", "ւ", "է", "ր", "տ", "ե", "ը", "ի", "ո", "պ", "չ", "ջ"],
+    top: ["ձ", "յ", "և", "օ", "ռ", "ժ"],
+    topFocus: "Ձ Յ ԵՎ Օ Ռ Ժ",
+  },
+};
+const ARMENIAN_ALPHABET_KEYS = ["ա", "բ", "գ", "դ", "ե", "զ", "է", "ը", "թ", "ժ", "ի", "լ", "խ", "ծ", "կ", "հ", "ձ", "ղ", "ճ", "մ", "յ", "ն", "շ", "ո", "չ", "պ", "ջ", "ռ", "ս", "վ", "տ", "ր", "ց", "ւ", "փ", "ք", "օ", "ֆ", "և"];
+const ARMENIAN_SPEED_SENTENCES = [
+  "Ես գրում եմ հանգիստ ձեռքերով։",
+  "Իմ մատները վերադառնում են հիմնական շարքին։",
+  "Դանդաղ սկիզբը կարող է դառնալ ուժեղ ավարտ։",
+  "Ես կարդում եմ հաջորդ բառը և հետո սեղմում։",
+  "Բացատը սեղմում եմ բութ մատով։",
+  "Կայուն վարժությունը հեշտացնում է մուտքագրումը։",
+  "Աչքերս պահում եմ էկրանին։",
+  "Կարճ բառերը օգնում են պահել ռիթմը։",
+  "Ես դանդաղեցնում եմ, երբ կորցնում եմ վերահսկումը։",
+  "Յուրաքանչյուր տառ ունի իր մատը։",
+  "Ձեռքերս մնում են հանգիստ։",
+  "Ճիշտ դիրքը օգնում է արագ գրել։",
+  "Ես շնչում եմ և պահում մեղմ ռիթմ։",
+  "Մեկ րոպեն բավարար է մաքուր արդյունքի համար։",
+  "Յուրաքանչյուր փորձից հետո կարող եմ լավանալ։",
+  "Հաջորդ նախադասությունը նոր սկիզբ է տալիս։",
+  "Ես գրում եմ այն բառը, որը տեսնում եմ։",
+  "Ճշտությունը բնական կերպով մեծացնում է արագությունը։",
+  "Դաստակներս մնում են թեթև ու հանգիստ։",
+  "Ես ավարտում եմ տողը առանց ներքև նայելու։",
+  "Թող մատներս գտնեն հաջորդ ստեղնը։",
+  "Ճիշտ բառը ավելի լավ է, քան շտապ բառը։",
+  "Ուսերս մնում են ազատ, երբ վարժվում եմ։",
+  "Ես հետևում եմ նախադասությանը ձախից աջ։",
+  "Յուրաքանչյուր բացատ օգնում է նորից դասավորվել։",
+  "Ես շարունակում եմ գրել, երբ տողը փոխվում է։",
+  "Իմ նպատակը հանգիստ մեկ րոպե է։",
+  "Կարող եմ դանդաղել և լավ արդյունք ստանալ։",
+  "Հիմնական շարքը իմ մեկնարկային տեղն է։",
+  "Ես նկատում եմ սխալը և վերադառնում ռիթմին։",
+  "Փոքր առաջընթացը օրեցօր մեծանում է։",
+  "Ես մեղմ եմ սեղմում և շարունակում եմ շարժվել։",
+  "Հաջորդ բառը միակ բառն է, որի մասին մտածում եմ։",
+  "Երկու ձեռքերս պահում եմ հավասարակշռված։",
+  "Մատներս շարժվում են և վերադառնում իրենց տեղը։",
+  "Ես վստահում եմ վարժությանը, ոչ թե շտապելուն։",
+  "Մեկ հանգիստ փորձը կարող է շատ բան սովորեցնել։",
+  "Յուրաքանչյուր նախադասությամբ վստահություն եմ հավաքում։",
+  "Ամբողջ րոպեի ընթացքում մնում եմ համբերատար։",
+  "Լավ ռիթմը ստեղնաշարը դարձնում է ավելի հանգիստ։",
+];
+
+function uniqueKeys(keys) {
+  return Array.from(new Set(keys.filter(Boolean)));
+}
+
+function upperArmenianKey(key) {
+  return key === "և" ? "ԵՎ" : key.toLocaleUpperCase("hy-AM");
+}
+
+function keyListLabel(keys) {
+  return keys.map(upperArmenianKey).join(" ");
+}
+
+function repeatedDrill(keys, cycles = 2) {
+  const output = [];
+  for (let cycle = 0; cycle < cycles; cycle += 1) {
+    output.push(...keys);
+    output.push(...keys.slice().reverse());
+  }
+  return output.join(" ");
+}
+
+function pairText(left, right, hard = false) {
+  const easyParts = [left, right, left, right, `${left}${left}`, `${right}${right}`, `${left}${right}`, `${right}${left}`, left, right, `${left}${right}`, `${right}${left}`, `${left}${left}`, `${right}${right}`];
+  const hardParts = [...easyParts, `${right}${left}`, `${left}${right}`, right, left, `${left}${left}`, `${right}${right}`, `${left}${right}`, `${right}${left}`, left, right];
+  return (hard ? hardParts : easyParts).join(" ");
+}
+
+function makeArmenianLessons(config) {
+  const homeKeys = uniqueKeys([...config.homeLeft, ...config.homeRight]);
+  const allLetterKeys = uniqueKeys([...homeKeys, ...config.lower, ...config.upper, ...config.top]);
+  const allCoverageKeys = uniqueKeys([...allLetterKeys, ...ARMENIAN_ALPHABET_KEYS]);
+  const layoutPrefix = config.id === "legacy" ? "legacy" : "regular";
+
+  return [
+    {
+      id: `${layoutPrefix}-index-easy`,
+      level: "1Ա",
+      section: `Գտիր ${upperArmenianKey(config.leftIndex)}-ն և ${upperArmenianKey(config.rightIndex)}-ն`,
+      title: `${upperArmenianKey(config.leftIndex)} և ${upperArmenianKey(config.rightIndex)}․ հեշտ`,
+      focus: `${upperArmenianKey(config.leftIndex)} ${upperArmenianKey(config.rightIndex)}`,
+      difficulty: "Հեշտ",
+      keys: [config.leftIndex, config.rightIndex],
+      goal: "Զգա երկու ցուցամատների հիմնական դիրքը։",
+      tutorial: {
+        lead: `Միացրու հայերեն ստեղնաշարը։ Ձախ ցուցամատը դիր ${upperArmenianKey(config.leftIndex)}-ի վրա, իսկ աջ ցուցամատը՝ ${upperArmenianKey(config.rightIndex)}-ի վրա։`,
+        left: `Ձախ ցուցամատ՝ ${upperArmenianKey(config.leftIndex)}`,
+        right: `Աջ ցուցամատ՝ ${upperArmenianKey(config.rightIndex)}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: `Յուրաքանչյուր հարվածից հետո ցուցամատները վերադարձրու ${upperArmenianKey(config.leftIndex)} և ${upperArmenianKey(config.rightIndex)} դիրքերին։`,
+      },
+      text: pairText(config.leftIndex, config.rightIndex, false),
+    },
+    {
+      id: `${layoutPrefix}-index-hard`,
+      level: "1Բ",
+      section: `Գտիր ${upperArmenianKey(config.leftIndex)}-ն և ${upperArmenianKey(config.rightIndex)}-ն`,
+      title: `${upperArmenianKey(config.leftIndex)} և ${upperArmenianKey(config.rightIndex)}․ դժվար`,
+      focus: `${upperArmenianKey(config.leftIndex)} ${upperArmenianKey(config.rightIndex)}`,
+      difficulty: "Դժվար",
+      keys: [config.leftIndex, config.rightIndex],
+      goal: "Պահիր հավասար ռիթմ՝ փոխելով ձախ և աջ ցուցամատները։",
+      tutorial: {
+        lead: `Ձախ ցուցամատը պահիր ${upperArmenianKey(config.leftIndex)}-ի վրա, աջ ցուցամատը՝ ${upperArmenianKey(config.rightIndex)}-ի վրա։ Այս վարժությունն ավելի երկար է և ավելի խառը։`,
+        left: `Ձախ ցուցամատ՝ ${upperArmenianKey(config.leftIndex)}`,
+        right: `Աջ ցուցամատ՝ ${upperArmenianKey(config.rightIndex)}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Մտքում ասա՝ ձախ, աջ, ձախ, աջ, հետո սեղմիր ստեղնը։",
+      },
+      text: pairText(config.leftIndex, config.rightIndex, true),
+    },
+    {
+      id: `${layoutPrefix}-middle-easy`,
+      level: "2Ա",
+      section: `Ավելացրու ${upperArmenianKey(config.leftMiddle)}-ն և ${upperArmenianKey(config.rightMiddle)}-ն`,
+      title: `${upperArmenianKey(config.leftMiddle)} և ${upperArmenianKey(config.rightMiddle)}․ հեշտ`,
+      focus: `${upperArmenianKey(config.leftMiddle)} ${upperArmenianKey(config.rightMiddle)}`,
+      difficulty: "Հեշտ",
+      keys: [config.leftIndex, config.rightIndex, config.leftMiddle, config.rightMiddle],
+      goal: "Միջնամատները շարժիր, իսկ ցուցամատները պահիր իրենց տեղում։",
+      tutorial: {
+        lead: `Ձախ միջնամատը օգտագործիր ${upperArmenianKey(config.leftMiddle)}-ի համար, աջ միջնամատը՝ ${upperArmenianKey(config.rightMiddle)}-ի համար։ Ցուցամատները մնում են ${upperArmenianKey(config.leftIndex)}-ի և ${upperArmenianKey(config.rightIndex)}-ի վրա։`,
+        left: `Ձախ միջնամատ՝ ${upperArmenianKey(config.leftMiddle)}`,
+        right: `Աջ միջնամատ՝ ${upperArmenianKey(config.rightMiddle)}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Մի շարժիր ամբողջ ձեռքը․ թող աշխատի միայն պետք եղած մատը։",
+      },
+      text: `${pairText(config.leftMiddle, config.rightMiddle, false)} ${config.leftIndex} ${config.rightIndex} ${config.leftMiddle}${config.leftIndex} ${config.rightIndex}${config.rightMiddle}`,
+    },
+    {
+      id: `${layoutPrefix}-middle-hard`,
+      level: "2Բ",
+      section: `Ավելացրու ${upperArmenianKey(config.leftMiddle)}-ն և ${upperArmenianKey(config.rightMiddle)}-ն`,
+      title: `${upperArmenianKey(config.leftMiddle)} և ${upperArmenianKey(config.rightMiddle)}․ դժվար`,
+      focus: `${upperArmenianKey(config.leftMiddle)} ${upperArmenianKey(config.rightMiddle)}`,
+      difficulty: "Դժվար",
+      keys: [config.leftIndex, config.rightIndex, config.leftMiddle, config.rightMiddle],
+      goal: "Խառնիր ցուցամատներն ու միջնամատները՝ առանց ձեռքերը տեղաշարժելու։",
+      tutorial: {
+        lead: `Ձախ ձեռքը աշխատում է ${upperArmenianKey(config.leftMiddle)} և ${upperArmenianKey(config.leftIndex)} ստեղներով, աջ ձեռքը՝ ${upperArmenianKey(config.rightIndex)} և ${upperArmenianKey(config.rightMiddle)} ստեղներով։`,
+        left: `Ձախ՝ ${upperArmenianKey(config.leftMiddle)} միջնամատով, ${upperArmenianKey(config.leftIndex)} ցուցամատով`,
+        right: `Աջ՝ ${upperArmenianKey(config.rightIndex)} ցուցամատով, ${upperArmenianKey(config.rightMiddle)} միջնամատով`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Եթե շփոթվեցիր, դանդաղեցրու և նորից գտիր հիմնական դիրքը։",
+      },
+      text: repeatedDrill([config.leftMiddle, config.rightMiddle, config.leftIndex, config.rightIndex], 4),
+    },
+    {
+      id: `${layoutPrefix}-ring-easy`,
+      level: "3Ա",
+      section: `Ավելացրու ${upperArmenianKey(config.leftRing)}-ն և ${upperArmenianKey(config.rightRing)}-ն`,
+      title: `${upperArmenianKey(config.leftRing)} և ${upperArmenianKey(config.rightRing)}․ հեշտ`,
+      focus: `${upperArmenianKey(config.leftRing)} ${upperArmenianKey(config.rightRing)}`,
+      difficulty: "Հեշտ",
+      keys: [config.leftIndex, config.rightIndex, config.leftMiddle, config.rightMiddle, config.leftRing, config.rightRing],
+      goal: "Յուրաքանչյուր մատ թող ունենա իր ստեղնը։",
+      tutorial: {
+        lead: `Ավելացրու մատնեմատները․ ձախ մատնեմատը՝ ${upperArmenianKey(config.leftRing)}-ի համար, աջ մատնեմատը՝ ${upperArmenianKey(config.rightRing)}-ի համար։`,
+        left: `Ձախ մատնեմատ՝ ${upperArmenianKey(config.leftRing)}`,
+        right: `Աջ մատնեմատ՝ ${upperArmenianKey(config.rightRing)}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Մատնեմատները սկզբում կարող են դանդաղ լինել․ կարևորը ճիշտությունն է։",
+      },
+      text: repeatedDrill([config.leftRing, config.rightRing, config.leftMiddle, config.rightMiddle, config.leftIndex, config.rightIndex], 2),
+    },
+    {
+      id: `${layoutPrefix}-ring-hard`,
+      level: "3Բ",
+      section: `Ավելացրու ${upperArmenianKey(config.leftRing)}-ն և ${upperArmenianKey(config.rightRing)}-ն`,
+      title: `${upperArmenianKey(config.leftRing)} և ${upperArmenianKey(config.rightRing)}․ դժվար`,
+      focus: `${upperArmenianKey(config.leftRing)} ${upperArmenianKey(config.rightRing)}`,
+      difficulty: "Դժվար",
+      keys: [config.leftIndex, config.rightIndex, config.leftMiddle, config.rightMiddle, config.leftRing, config.rightRing],
+      goal: "Խառնիր երեք մատ ձախ ձեռքում և երեք մատ աջ ձեռքում։",
+      tutorial: {
+        lead: `Ձախ ձեռքը օգտագործում է ${upperArmenianKey(config.leftRing)} ${upperArmenianKey(config.leftMiddle)} ${upperArmenianKey(config.leftIndex)}, իսկ աջ ձեռքը՝ ${upperArmenianKey(config.rightIndex)} ${upperArmenianKey(config.rightMiddle)} ${upperArmenianKey(config.rightRing)}։`,
+        left: `Ձախ՝ ${upperArmenianKey(config.leftRing)}, ${upperArmenianKey(config.leftMiddle)}, ${upperArmenianKey(config.leftIndex)}`,
+        right: `Աջ՝ ${upperArmenianKey(config.rightIndex)}, ${upperArmenianKey(config.rightMiddle)}, ${upperArmenianKey(config.rightRing)}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Յուրաքանչյուր հարվածից հետո վերադարձիր հիմնական շարքին։",
+      },
+      text: repeatedDrill([config.leftRing, config.rightRing, config.leftMiddle, config.rightMiddle, config.leftIndex, config.rightIndex], 4),
+    },
+    {
+      id: `${layoutPrefix}-home-easy`,
+      level: "4Ա",
+      section: "Հիմնական շարք",
+      title: "Հիմնական շարք․ հեշտ",
+      focus: keyListLabel(homeKeys),
+      difficulty: "Հեշտ",
+      keys: homeKeys,
+      goal: "Կառուցիր ամբողջ հիմնական շարքի դիրքը։",
+      tutorial: {
+        lead: "Հիմա ամբողջ հիմնական շարքն է աշխատում։ Ամեն մատ թող մնա իր ստեղնի մոտ։",
+        left: `Ձախ ձեռք՝ ${keyListLabel(config.homeLeft)}`,
+        right: `Աջ ձեռք՝ ${keyListLabel(config.homeRight)}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Բութ մատները հանգիստ պահիր բացատի մոտ։",
+      },
+      text: repeatedDrill(homeKeys, 2),
+    },
+    {
+      id: `${layoutPrefix}-home-hard`,
+      level: "4Բ",
+      section: "Հիմնական շարք",
+      title: "Հիմնական շարք․ դժվար",
+      focus: keyListLabel(homeKeys),
+      difficulty: "Դժվար",
+      keys: homeKeys,
+      goal: "Օգտագործիր ամբողջ հիմնական շարքը փոքր խմբերով։",
+      tutorial: {
+        lead: "Բոլոր հիմնական մատները հիմա աշխատում են։ Մի սահեցրու մեկ մատը ամբողջ շարքով․ ամեն մատ ունի իր գործը։",
+        left: `Ձախ ձեռք՝ ${keyListLabel(config.homeLeft)}`,
+        right: `Աջ ձեռք՝ ${keyListLabel(config.homeRight)}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Ձեռքի դիրքը պահիր հանգիստ և կայուն։",
+      },
+      text: repeatedDrill(homeKeys, 4),
+    },
+    {
+      id: `${layoutPrefix}-lower-easy`,
+      level: "5Ա",
+      section: "Ներքևի շարք",
+      title: "Ներքևի շարք․ հեշտ",
+      focus: keyListLabel(config.lower),
+      difficulty: "Հեշտ",
+      keys: uniqueKeys([...homeKeys, ...config.lower]),
+      goal: "Սովորիր ներքևի շարքի հայկական տառերը։",
+      tutorial: {
+        lead: "Ներքևի շարքի համար մատը իջեցրու, սեղմիր, հետո վերադարձրու հիմնական շարքին։",
+        left: `Ձախ կողմ՝ ${keyListLabel(config.lower.slice(0, Math.ceil(config.lower.length / 2)))}`,
+        right: `Աջ կողմ՝ ${keyListLabel(config.lower.slice(Math.ceil(config.lower.length / 2)))}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Իջնելուց հետո անպայման վերադարձիր հիմնական դիրքին։",
+      },
+      text: repeatedDrill(config.lower, 2),
+    },
+    {
+      id: `${layoutPrefix}-lower-hard`,
+      level: "5Բ",
+      section: "Ներքևի շարք",
+      title: "Ներքևի շարք․ դժվար",
+      focus: keyListLabel(config.lower),
+      difficulty: "Դժվար",
+      keys: uniqueKeys([...homeKeys, ...config.lower]),
+      goal: "Խառնիր ներքևի շարքը հիմնական շարքի հետ։",
+      tutorial: {
+        lead: "Ներքևի շարքի տառերը խառնիր հիմնական շարքի հետ՝ առանց ձեռքի դիրքը կորցնելու։",
+        left: `Ձախ կողմ՝ ${keyListLabel(config.lower.slice(0, Math.ceil(config.lower.length / 2)))}`,
+        right: `Աջ կողմ՝ ${keyListLabel(config.lower.slice(Math.ceil(config.lower.length / 2)))}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Եթե շեղվեցիր, նորից գտիր ցուցամատների հիմնական ստեղները։",
+      },
+      text: repeatedDrill(uniqueKeys([...config.lower, ...homeKeys]), 3),
+    },
+    {
+      id: `${layoutPrefix}-upper-easy`,
+      level: "6Ա",
+      section: "Վերին տառային շարք",
+      title: "Վերին շարք․ հեշտ",
+      focus: keyListLabel(config.upper),
+      difficulty: "Հեշտ",
+      keys: uniqueKeys([...homeKeys, ...config.upper]),
+      goal: "Բարձրացրու մատը և վերադարձիր հիմնական դիրքին։",
+      tutorial: {
+        lead: "Վերին շարքի համար մեկ մատը բարձրացրու, սեղմիր, հետո վերադարձրու հիմնական դիրքին։",
+        left: `Ձախ կողմ՝ ${keyListLabel(config.upper.slice(0, Math.ceil(config.upper.length / 2)))}`,
+        right: `Աջ կողմ՝ ${keyListLabel(config.upper.slice(Math.ceil(config.upper.length / 2)))}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Վերադարձը շարժման մաս է․ մատները օդում մի թող։",
+      },
+      text: repeatedDrill(config.upper, 2),
+    },
+    {
+      id: `${layoutPrefix}-upper-hard`,
+      level: "6Բ",
+      section: "Վերին տառային շարք",
+      title: "Վերին շարք․ դժվար",
+      focus: keyListLabel(config.upper),
+      difficulty: "Դժվար",
+      keys: uniqueKeys([...homeKeys, ...config.upper]),
+      goal: "Խառնիր վերին շարքը հիմնական շարքի հետ։",
+      tutorial: {
+        lead: "Բարձրացիր միայն երբ պետք է, հետո անմիջապես վերադարձիր հիմնական շարքին։",
+        left: `Ձախ կողմ՝ ${keyListLabel(config.upper.slice(0, Math.ceil(config.upper.length / 2)))}`,
+        right: `Աջ կողմ՝ ${keyListLabel(config.upper.slice(Math.ceil(config.upper.length / 2)))}`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Երկու բարձր շարժում անընդմեջ լինելու դեպքում դանդաղեցրու։",
+      },
+      text: repeatedDrill(uniqueKeys([...config.upper, ...homeKeys]), 3),
+    },
+    {
+      id: `${layoutPrefix}-top-easy`,
+      level: "7Ա",
+      section: "Մնացած հայկական տառերը",
+      title: "Մնացած տառեր․ հեշտ",
+      focus: config.topFocus,
+      difficulty: "Հեշտ",
+      keys: uniqueKeys([...homeKeys, ...config.top]),
+      goal: "Ավելացրու մնացած հայկական տառերը։",
+      tutorial: {
+        lead: "Այս դասը լրացնում է հայկական տառերի հավաքածուն։ Շարժումը դանդաղ արա և վերադարձիր հիմնական շարքին։",
+        left: `Տառեր՝ ${keyListLabel(config.top)}`,
+        right: "Երկու ձեռքն էլ կարող է աշխատել՝ ըստ ստեղնի դիրքի",
+        leftLabel: "Լրացուցիչ տառեր",
+        rightLabel: "Ձեռքի դիրք",
+        reminder: "Այս դասից հետո հայկական բոլոր տառերը արդեն հանդիպել են վարժություններում։",
+      },
+      text: repeatedDrill(config.top, 3),
+    },
+    {
+      id: `${layoutPrefix}-top-hard`,
+      level: "7Բ",
+      section: "Մնացած հայկական տառերը",
+      title: "Մնացած տառեր․ դժվար",
+      focus: config.topFocus,
+      difficulty: "Դժվար",
+      keys: uniqueKeys([...homeKeys, ...config.upper, ...config.lower, ...config.top]),
+      goal: "Խառնիր բոլոր հայկական տառերը փոքր խմբերով։",
+      tutorial: {
+        lead: "Հիմա խառնում ենք բոլոր սովորած տառերը։ Աչքերդ պահիր էկրանին և աշխատիր հանգիստ ռիթմով։",
+        left: `Տառեր՝ ${keyListLabel(config.top)}`,
+        right: "Բոլոր շարքերից կտեսնես տառեր",
+        leftLabel: "Լրացուցիչ տառեր",
+        rightLabel: "Կրկնություն",
+        reminder: "Եթե մի տառ դժվար է, ավարտից հետո կրկնիր այս դասը։",
+      },
+      text: repeatedDrill(allLetterKeys, 2),
+    },
+    {
+      id: `${layoutPrefix}-alphabet-easy`,
+      level: "8Ա",
+      section: "Ամբողջ այբուբեն",
+      title: "Այբուբեն․ հեշտ",
+      focus: "բոլոր տառերը",
+      difficulty: "Հեշտ",
+      keys: allCoverageKeys,
+      goal: "Վերանայիր հայկական բոլոր տառերը։",
+      tutorial: {
+        lead: "Սա ամբողջական ստուգում է․ հայկական ամեն տառ պետք է առնվազն մեկ անգամ հայտնվի։",
+        left: "Տառերը գալիս են փոքր խմբերով",
+        right: "Դանդաղությունը թույլատրելի է",
+        leftLabel: "Այբուբեն",
+        rightLabel: "Կրկնություն",
+        reminder: "Ճշտությունը հիմա ավելի կարևոր է, քան արագությունը։",
+      },
+      text: repeatedDrill(ARMENIAN_ALPHABET_KEYS, 1),
+    },
+    {
+      id: `${layoutPrefix}-alphabet-hard`,
+      level: "8Բ",
+      section: "Ամբողջ այբուբեն",
+      title: "Այբուբեն․ դժվար",
+      focus: "բոլոր տառերը",
+      difficulty: "Դժվար",
+      keys: allCoverageKeys,
+      goal: "Կրկնիր ամբողջ այբուբենը ավելի երկար շարքով։",
+      tutorial: {
+        lead: "Այս երկար դասը ստուգում է՝ արդյոք ոչ մի հայկական տառ չի մնացել բաց թողնված։",
+        left: "Բոլոր տառերը կրկնվում են",
+        right: "Պահիր հիմնական դիրքը",
+        leftLabel: "Այբուբեն",
+        rightLabel: "Կրկնություն",
+        reminder: "Կանգ առ միայն այնքան, որքան պետք է ճիշտ տառը գտնելու համար։",
+      },
+      text: repeatedDrill(ARMENIAN_ALPHABET_KEYS, 2),
+    },
+    {
+      id: `${layoutPrefix}-capitals-easy`,
+      level: "9Ա",
+      section: "Մեծատառեր",
+      title: "Մեծատառեր․ հեշտ",
+      focus: "Shift և տառեր",
+      difficulty: "Հեշտ",
+      keys: uniqueKeys(["shift", ...homeKeys, "ե", "ս", "լ", "վ", "գ", "ր", "մ"]),
+      goal: "Օգտագործիր Shift-ը՝ առաջին տառը մեծատառ դարձնելու համար։",
+      tutorial: {
+        lead: "Մեծատառերի համար պահիր Shift-ը մեկ ճկույթով և սեղմիր տառը մյուս ձեռքով։ Հետո բաց թող Shift-ը և վերադարձիր հիմնական դիրքին։",
+        left: "Ձախ ճկույթ՝ Shift",
+        right: "Աջ ճկույթ՝ Shift",
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Մեծատառից հետո անմիջապես բաց թող Shift-ը, որպեսզի հաջորդ տառը փոքրատառ լինի։",
+      },
+      text: "Ես լավ եմ։ Ես գրում եմ։ Դասը հեշտ է։ Ես կարող եմ գրել։",
+    },
+    {
+      id: `${layoutPrefix}-capitals-hard`,
+      level: "9Բ",
+      section: "Մեծատառեր",
+      title: "Մեծատառեր․ դժվար",
+      focus: "Shift և տառեր",
+      difficulty: "Դժվար",
+      keys: uniqueKeys(["shift", ...allCoverageKeys]),
+      goal: "Մեծատառերով սկսիր ավելի երկար նախադասություններ։",
+      tutorial: {
+        lead: "Օգտագործիր հակառակ ձեռքի Shift-ը, երբ կարող ես։ Այս դասը երկար է, բայց դեռ աշխատիր հանգիստ։",
+        left: "Ձախ կամ աջ ճկույթ՝ Shift",
+        right: "Տառը սեղմում է հակառակ ձեռքը, երբ հնարավոր է",
+        leftLabel: "Shift",
+        rightLabel: "Տառեր",
+        reminder: "Եթե Shift-ը պահած մնաց, կանգ առ և նորից սկսիր ճիշտ դիրքից։",
+      },
+      text: "Ես սովորում եմ հայերեն մուտքագրել։ Ճիշտ դիրքը օգնում է արագ գրել։ Յուրաքանչյուր տառ ունի իր մատը։",
+    },
+    {
+      id: `${layoutPrefix}-speed-1-minute`,
+      type: "speed",
+      level: "10",
+      section: "Արագության փորձ",
+      title: "Մեկ րոպեի արագություն",
+      focus: "պատահական նախադասություններ",
+      difficulty: "Փորձ",
+      keys: uniqueKeys([...allCoverageKeys, ",", ".", "։"]),
+      goal: "Մեկ րոպեում մուտքագրիր որքան կարող ես շատ ամբողջական բառ։",
+      tutorial: {
+        lead: "Սկսելուց առաջ բոլոր մատները դիր հիմնական շարքի վրա։ Այս փորձի նպատակն է հանգիստ արագությունը, ոչ թե շտապելը։",
+        left: `Ձախ ձեռքը սկսում է ${keyListLabel(config.homeLeft)} դիրքից`,
+        right: `Աջ ձեռքը սկսում է ${keyListLabel(config.homeRight)} դիրքից`,
+        leftLabel: "Ձախ ձեռք",
+        rightLabel: "Աջ ձեռք",
+        reminder: "Փորձը տևում է մեկ րոպե։ Ճիշտ ու հանգիստ մուտքագրումը սովորաբար ավելի լավ արդյունք է տալիս։",
+      },
+      sentenceBank: ARMENIAN_SPEED_SENTENCES,
+    },
+  ];
+}
+
+const ARMENIAN_LESSON_SETS_BY_LAYOUT = {
+  regular: makeArmenianLessons(ARMENIAN_LAYOUT_CONFIGS.regular),
+  legacy: makeArmenianLessons(ARMENIAN_LAYOUT_CONFIGS.legacy),
 };
 const ICON_PATHS = {
   activity: <path d="M3 12h4l3-8 4 16 3-8h4" />,
@@ -877,14 +1356,6 @@ const ICON_PATHS = {
     <>
       <rect x="3" y="5" width="18" height="14" rx="2" />
       <path d="M7 9h.01M11 9h.01M15 9h.01M19 9h.01M7 13h.01M11 13h.01M15 13h.01M19 13h.01M8 17h8" />
-    </>
-  ),
-  hand: (
-    <>
-      <path d="M8 21V11a2 2 0 0 1 4 0v7" />
-      <path d="M12 18V8a2 2 0 1 1 4 0v10" />
-      <path d="M16 18v-6a2 2 0 1 1 4 0v7" />
-      <path d="M8 13H6a2 2 0 0 0-2 2v1c0 3 2 5 5 5h7a4 4 0 0 0 4-4v-1" />
     </>
   ),
   pause: <path d="M8 5v14M16 5v14" />,
@@ -932,9 +1403,9 @@ function loadLanguage() {
 function loadArmenianKeyboardLayout() {
   try {
     const stored = localStorage.getItem(ARMENIAN_KEYBOARD_STORAGE_KEY);
-    return stored === "legacy" ? "legacy" : "regular";
+    return stored === "regular" ? "regular" : "legacy";
   } catch {
-    return "regular";
+    return "legacy";
   }
 }
 
@@ -944,6 +1415,11 @@ function saveProgress(progress) {
 
 function progressKey(language, lessonId) {
   return `${language}:${lessonId}`;
+}
+
+function getLessonsForLanguage(language, armenianKeyboardLayout) {
+  if (language !== "hy") return LESSON_SETS.en;
+  return ARMENIAN_LESSON_SETS_BY_LAYOUT[armenianKeyboardLayout] || ARMENIAN_LESSON_SETS_BY_LAYOUT.legacy;
 }
 
 function formatKey(key, copy) {
@@ -1163,170 +1639,6 @@ function PromptPanel({ lesson, promptText, position, completion, lastKey, lastRe
   );
 }
 
-function getFingerForKey(key, keyboardRows) {
-  const normalizedTarget = normalizeKey(key);
-  for (let rowIndex = 0; rowIndex < keyboardRows.length; rowIndex += 1) {
-    const row = keyboardRows[rowIndex];
-    const columnIndex = row.findIndex((item) => normalizeKey(item) === normalizedTarget);
-    if (columnIndex === -1) continue;
-
-    const ratio = columnIndex / Math.max(row.length - 1, 1);
-    if (ratio < 0.14) return "left-pinky";
-    if (ratio < 0.28) return "left-ring";
-    if (ratio < 0.4) return "left-middle";
-    if (ratio < 0.5) return "left-index";
-    if (ratio < 0.62) return "right-index";
-    if (ratio < 0.74) return "right-middle";
-    if (ratio < 0.86) return "right-ring";
-    return "right-pinky";
-  }
-
-  return "left-index";
-}
-
-function makeKey(label, value = label, span = 1, className = "") {
-  return { label, value, span, className };
-}
-
-function buildEnglishDiagramRows() {
-  return {
-    columns: 16,
-    rows: [
-      ["~", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "+", makeKey("Backspace", "Backspace", 3, "wide-key")],
-      [makeKey("Tab", "Tab", 2, "wide-key"), "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "{", "}", "\\", makeKey("", "", 1, "ghost-key")],
-      [makeKey("CapsLock", "CapsLock", 2, "wide-key"), "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", makeKey("Enter", "Enter", 4, "wide-key")],
-      [makeKey("Shift", "Shift", 2, "wide-key"), "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", makeKey("Shift", "Shift", 5, "wide-key")],
-      [makeKey("", "", 4, "ghost-key"), makeKey("Space", " ", 8, "wide-key"), makeKey("", "", 4, "ghost-key")],
-    ],
-  };
-}
-
-function buildArmenianDiagramRows(keyboardRows) {
-  const columns = Math.max(...keyboardRows.map((row) => row.length)) + 4;
-  return {
-    columns,
-    rows: [
-      [...keyboardRows[0], makeKey("Backspace", "Backspace", 3, "wide-key")],
-      [makeKey("Tab", "Tab", 2, "wide-key"), ...keyboardRows[1]],
-      [makeKey("CapsLock", "CapsLock", 2, "wide-key"), ...keyboardRows[2], makeKey("Enter", "Enter", 2, "wide-key")],
-      [makeKey("Shift", "Shift", 2, "wide-key"), ...keyboardRows[3], makeKey("Shift", "Shift", 2, "wide-key")],
-      [makeKey("", "", Math.max(2, Math.floor(columns / 4)), "ghost-key"), makeKey("Space", " ", Math.max(6, Math.floor(columns / 2)), "wide-key")],
-    ],
-  };
-}
-
-function getDiagramLayout(keyboardRows) {
-  return keyboardRows.length === 3 ? buildEnglishDiagramRows() : buildArmenianDiagramRows(keyboardRows);
-}
-
-function flattenDiagramKeys(rows) {
-  const keys = [];
-  rows.forEach((row, rowIndex) => {
-    let column = 1;
-    row.forEach((rawKey) => {
-      const key = typeof rawKey === "string" ? makeKey(rawKey) : rawKey;
-      keys.push({ ...key, rowIndex, column });
-      column += key.span || 1;
-    });
-  });
-  return keys;
-}
-
-function getTouchPoint(diagramKeys, expectedKey, columns) {
-  const target = normalizeKey(expectedKey);
-  const key = diagramKeys.find((item) => normalizeKey(item.value) === target) || diagramKeys.find((item) => item.value && !item.className?.includes("ghost-key"));
-  if (!key) return { x: 50, y: 38 };
-
-  const x = ((key.column - 1 + (key.span || 1) / 2) / columns) * 100;
-  const rowY = [11, 27, 43, 59, 76][key.rowIndex] || 43;
-  return { x, y: rowY };
-}
-
-function PlacementKeyboardDiagram({ lesson, expectedKey, keyboardRows, copy }) {
-  const diagram = getDiagramLayout(keyboardRows);
-  const diagramKeys = flattenDiagramKeys(diagram.rows);
-  const touchPoint = getTouchPoint(diagramKeys, expectedKey || lesson.keys[0], diagram.columns);
-  const lessonKeySet = new Set(lesson.keys.map(normalizeKey));
-  const activeFinger = getFingerForKey(expectedKey || lesson.keys[0], keyboardRows);
-
-  return (
-    <div className="placement-diagram" style={{ "--touch-x": `${touchPoint.x}%`, "--touch-y": `${touchPoint.y}%` }}>
-      <div className="placement-keyboard" style={{ "--diagram-cols": diagram.columns }}>
-        {diagram.rows.map((row, rowIndex) => (
-          <div className={`placement-row row-${rowIndex}`} key={`row-${rowIndex}`}>
-            {row.map((rawKey, keyIndex) => {
-              const key = typeof rawKey === "string" ? makeKey(rawKey) : rawKey;
-              const normalizedValue = normalizeKey(key.value);
-              const keyClasses = [
-                "placement-key",
-                key.className,
-                lessonKeySet.has(normalizedValue) ? "lesson-touch" : "",
-                normalizedValue && normalizedValue === normalizeKey(expectedKey) ? "expected-touch" : "",
-              ].join(" ");
-
-              return (
-                <span className={keyClasses} style={{ gridColumn: `span ${key.span || 1}` }} key={`${rowIndex}-${keyIndex}-${key.label}`}>
-                  {key.value === " " ? copy.space : key.label}
-                </span>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-      <svg className={`hand-outline-svg active-${activeFinger}`} viewBox="0 0 1000 420" aria-hidden="true">
-        <path className="palm-outline left-hand-outline" d="M70 418V212C70 169 102 139 142 139c24 0 41 9 52 25 9-28 32-45 63-45 29 0 51 15 62 40 13-18 34-29 61-29 35 0 60 23 67 57 13-15 31-23 53-23 37 0 63 29 63 70v184" />
-        <path className="palm-outline right-hand-outline" d="M930 418V212c0-43-32-73-72-73-24 0-41 9-52 25-9-28-32-45-63-45-29 0-51 15-62 40-13-18-34-29-61-29-35 0-60 23-67 57-13-15-31-23-53-23-37 0-63 29-63 70v184" />
-        <path className="finger-outline left-pinky" d="M142 326V187" />
-        <path className="finger-outline left-ring" d="M255 320V144" />
-        <path className="finger-outline left-middle" d="M355 315V130" />
-        <path className="finger-outline left-index" d="M460 306V160" />
-        <path className="finger-outline right-index" d="M540 306V160" />
-        <path className="finger-outline right-middle" d="M645 315V130" />
-        <path className="finger-outline right-ring" d="M745 320V144" />
-        <path className="finger-outline right-pinky" d="M858 326V187" />
-      </svg>
-      <span className={`finger-touch-line ${activeFinger}`} aria-hidden="true" />
-      <span className="touch-dot" aria-hidden="true" />
-    </div>
-  );
-}
-
-function FingerTutorialContent({ lesson, copy, expectedKey, keyboardRows }) {
-  return (
-    <div className="finger-tutorial-content">
-      <span className="difficulty-pill">{lesson.difficulty}</span>
-      <p>{lesson.tutorial.lead}</p>
-      <PlacementKeyboardDiagram lesson={lesson} expectedKey={expectedKey} keyboardRows={keyboardRows} copy={copy} />
-      <div className="hand-diagram-grid">
-        <div className="hand-card">
-          <strong>{lesson.tutorial.left}</strong>
-          <span>{lesson.tutorial.leftLabel}</span>
-        </div>
-        <div className="hand-card">
-          <strong>{lesson.tutorial.right}</strong>
-          <span>{lesson.tutorial.rightLabel}</span>
-        </div>
-      </div>
-      <p className="tutorial-reminder">{lesson.tutorial.reminder}</p>
-    </div>
-  );
-}
-
-function FingerTutorialModal({ lesson, copy, expectedKey, keyboardRows, onClose }) {
-  return (
-    <div className="modal-backdrop" role="presentation">
-      <section className="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
-        <button className="modal-close" type="button" onClick={onClose} aria-label={copy.close}>
-          ×
-        </button>
-        <p className="lesson-label">{lesson.title}</p>
-        <h2 id="tutorial-title">{copy.tutorialTitle}</h2>
-        <FingerTutorialContent lesson={lesson} copy={copy} expectedKey={expectedKey} keyboardRows={keyboardRows} />
-      </section>
-    </div>
-  );
-}
-
 function VisualKeyboard({ keyboardRows, expectedKey, lessonKeys, lastKey, lastResult, copy, keyboardMeta }) {
   const normalizedLessonKeys = lessonKeys.map(normalizeKey);
   return (
@@ -1347,7 +1659,7 @@ function VisualKeyboard({ keyboardRows, expectedKey, lessonKeys, lastKey, lastRe
                 normalizedLessonKeys.includes(normalizedKey) ? "lesson-key" : "",
                 normalizedKey === normalizedExpectedKey ? "expected" : "",
                 normalizedKey === normalizedLastKey ? lastResult : "",
-                key === "f" || key === "j" || key === "ֆ" || key === "յ" ? "home-anchor" : "",
+                (rowIndex === 1 && (key === "f" || key === "j")) || (rowIndex === 2 && (key === "ֆ" || key === "յ" || key === "ճ")) ? "home-anchor" : "",
               ].join(" ");
               return (
                 <span className={keyClasses} key={key}>
@@ -1388,7 +1700,6 @@ function PracticeSurface({
   onPause,
   onRestart,
   onMoveLesson,
-  onOpenTutorial,
   onLanguageChange,
   onArmenianKeyboardLayoutChange,
 }) {
@@ -1437,9 +1748,6 @@ function PracticeSurface({
           <LanguageSwitcher language={language} copy={copy} onLanguageChange={onLanguageChange} />
           {language === "hy" ? <ArmenianKeyboardSwitcher keyboardLayout={armenianKeyboardLayout} copy={copy} onKeyboardLayoutChange={onArmenianKeyboardLayoutChange} /> : null}
           <div className="topbar-actions">
-            <button className="icon-button" type="button" onClick={onOpenTutorial} aria-label={copy.tutorialTitle} title={copy.tutorialTitle}>
-              <Icon name="hand" />
-            </button>
             <button className="icon-button" type="button" onClick={() => onMoveLesson(-1)} disabled={lessonIndex === 0} aria-label={copy.previousLesson} title={copy.previousLesson}>
               <Icon name="chevronLeft" />
             </button>
@@ -1585,14 +1893,13 @@ export default function App() {
   const [lastResult, setLastResult] = useState("idle");
   const [progress, setProgress] = useState(loadProgress);
   const [completionStats, setCompletionStats] = useState(null);
-  const [showTutorial, setShowTutorial] = useState(false);
   const [speedText, setSpeedText] = useState("");
   const appRef = useRef(null);
   const runtimeRef = useRef(null);
   const lastSpeedLeadRef = useRef("");
   const speedFinishInProgressRef = useRef(false);
 
-  const lessons = LESSON_SETS[language];
+  const lessons = getLessonsForLanguage(language, armenianKeyboardLayout);
   const lesson = lessons[lessonIndex];
   const lessonText = getLessonText(lesson, speedText);
   const copy = COPY[language];
@@ -1601,6 +1908,7 @@ export default function App() {
 
   runtimeRef.current = {
     language,
+    armenianKeyboardLayout,
     lessonIndex,
     position,
     correctCount,
@@ -1649,10 +1957,12 @@ export default function App() {
   }, []);
 
   const resetRound = useCallback((nextLessonIndex = lessonIndex, shouldArm = true) => {
-    const nextLesson = LESSON_SETS[language][nextLessonIndex];
+    const activeLessons = getLessonsForLanguage(language, armenianKeyboardLayout);
+    const safeLessonIndex = clamp(nextLessonIndex, 0, activeLessons.length - 1);
+    const nextLesson = activeLessons[safeLessonIndex];
     prepareSpeedPrompt(nextLesson);
     speedFinishInProgressRef.current = false;
-    setLessonIndex(nextLessonIndex);
+    setLessonIndex(safeLessonIndex);
     setPosition(0);
     setCorrectCount(0);
     setErrors(0);
@@ -1665,9 +1975,8 @@ export default function App() {
     setLastKey(null);
     setLastResult("idle");
     setCompletionStats(null);
-    setShowTutorial(false);
     window.requestAnimationFrame(() => appRef.current?.focus());
-  }, [language, lessonIndex, prepareSpeedPrompt]);
+  }, [armenianKeyboardLayout, language, lessonIndex, prepareSpeedPrompt]);
 
   const startLesson = useCallback(() => {
     if (lesson.type === "speed" && !speedText) {
@@ -1681,7 +1990,6 @@ export default function App() {
     setLastKey(null);
     setLastResult("idle");
     setCompletionStats(null);
-    setShowTutorial(false);
     window.requestAnimationFrame(() => appRef.current?.focus());
   }, [lesson, prepareSpeedPrompt, speedText]);
 
@@ -1719,13 +2027,30 @@ export default function App() {
     setLastResult("idle");
     setCompletionStats(null);
     setSpeedText("");
-    setShowTutorial(false);
   }, []);
 
   const changeArmenianKeyboardLayout = useCallback((nextLayout) => {
-    setArmenianKeyboardLayout(nextLayout === "legacy" ? "legacy" : "regular");
-    setShowTutorial(false);
-  }, []);
+    const safeLayout = nextLayout === "regular" ? "regular" : "legacy";
+    const nextLesson = getLessonsForLanguage("hy", safeLayout)[0];
+    prepareSpeedPrompt(nextLesson);
+    speedFinishInProgressRef.current = false;
+    setArmenianKeyboardLayout(safeLayout);
+    setLessonIndex(0);
+    setPosition(0);
+    setCorrectCount(0);
+    setErrors(0);
+    setStreak(0);
+    setBestStreak(0);
+    setElapsedSeconds(0);
+    setStartedAt(null);
+    setIsArmed(true);
+    setIsRunning(false);
+    setLastKey(null);
+    setLastResult("idle");
+    setCompletionStats(null);
+    setSpeedText("");
+    window.requestAnimationFrame(() => appRef.current?.focus());
+  }, [prepareSpeedPrompt]);
 
   const completeLesson = useCallback((finishedLanguage, finishedLesson, finalCorrectCount, finalErrors, finalElapsedSeconds, finalPosition, finalBestStreak, targetTextOverride = "") => {
     const targetText = targetTextOverride || finishedLesson.text || "";
@@ -1771,7 +2096,7 @@ export default function App() {
       const nextElapsed = Math.floor((Date.now() - snapshot.startedAt) / 1000);
       if (nextElapsed < SPEED_DURATION_SECONDS) return;
 
-      const activeLesson = LESSON_SETS[snapshot.language][snapshot.lessonIndex];
+      const activeLesson = getLessonsForLanguage(snapshot.language, snapshot.armenianKeyboardLayout)[snapshot.lessonIndex];
       speedFinishInProgressRef.current = true;
       setElapsedSeconds(SPEED_DURATION_SECONDS);
       completeLesson(
@@ -1791,7 +2116,6 @@ export default function App() {
 
   useEffect(() => {
     function handleKeyDown(event) {
-      if (showTutorial) return;
       const snapshot = runtimeRef.current;
       if (!snapshot?.isArmed && !snapshot?.isRunning) return;
       if (event.ctrlKey || event.metaKey || event.altKey) return;
@@ -1800,7 +2124,7 @@ export default function App() {
       if (key.length !== 1 && key !== "Backspace" && key !== "Enter") return;
       event.preventDefault();
 
-      const activeLessons = LESSON_SETS[snapshot.language];
+      const activeLessons = getLessonsForLanguage(snapshot.language, snapshot.armenianKeyboardLayout);
       const activeLesson = activeLessons[snapshot.lessonIndex];
       const activeLessonText = snapshot.lessonText || activeLesson.text || "";
       const expectedKey = activeLessonText[snapshot.position] || "";
@@ -1874,7 +2198,7 @@ export default function App() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [completeLesson, resetRound, showTutorial]);
+  }, [completeLesson, resetRound]);
 
   return (
     <main className={`app-shell language-${language}`} tabIndex="-1" ref={appRef}>
@@ -1902,23 +2226,10 @@ export default function App() {
         onPause={pauseLesson}
         onRestart={restartLesson}
         onMoveLesson={moveLesson}
-        onOpenTutorial={() => setShowTutorial(true)}
         onLanguageChange={changeLanguage}
         onArmenianKeyboardLayoutChange={changeArmenianKeyboardLayout}
       />
       <ProgressPanel language={language} lessons={lessons} progress={progress} lesson={lesson} bestStreak={bestStreak} copy={copy} armenianKeyboardLayout={armenianKeyboardLayout} />
-      {showTutorial ? (
-        <FingerTutorialModal
-          lesson={lesson}
-          copy={copy}
-          expectedKey={lessonText[position] || lessonText[0] || lesson.keys[0]}
-          keyboardRows={keyboardRows}
-          onClose={() => {
-            setShowTutorial(false);
-            window.requestAnimationFrame(() => appRef.current?.focus());
-          }}
-        />
-      ) : null}
       <CompletionModal
         stats={completionStats}
         copy={copy}
