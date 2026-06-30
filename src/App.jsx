@@ -800,22 +800,24 @@ const COPY = {
     howToPractice: "Ինչպես վարժվել",
     steps: ["Սեղմիր «Սկսել»՝ պատրաստվելու համար։", "Ժամաչափը սկսվում է առաջին ստեղնից։", "Նախ աշխատիր ճշտության վրա, հետո՝ արագության։"],
     keyboardSetupTitle: "Հայերեն ստեղնաշարի կարգավորում",
-    keyboardSetupIntro: "Windows-ում կարող ես ավելացնել երկու տարբերակն էլ և փոխել դրանց միջև առաջադրանքից առաջ։",
+    keyboardSetupIntro: "Windows-ում կարող ես ավելացնել երեք տարբերակն էլ և փոխել դրանց միջև առաջադրանքից առաջ։",
     keyboardSetupSteps: [
       "Բացիր Կարգավորումներ → Ժամանակ և լեզու → Լեզու և տարածաշրջան։",
       "Ավելացրու կամ ընտրիր Հայերեն լեզուն, հետո բացիր Ստեղնաշարեր բաժինը։",
       "Ավելացրու սովորական արևելահայերեն դասավորությունը։",
       "Ավելացրու նաև ավանդական արևելահայերեն դասավորությունը։",
+      "Ավելացրու նաև գրամեքենայի հայերեն դասավորությունը, եթե ուզում ես սովորել այդ տարբերակը։",
       "Փոխելու համար օգտագործիր Windows + Space կամ լեզվի ընտրիչը էկրանի ներքևում։",
     ],
-    keyboardLayoutsTitle: "Օգտագործիր երկու դասավորությունը",
-    keyboardLayouts: ["Սովորական արևելահայերեն", "Ավանդական արևելահայերեն"],
+    keyboardLayoutsTitle: "Օգտագործիր երեք դասավորությունները",
+    keyboardLayouts: ["Սովորական արևելահայերեն", "Ավանդական արևելահայերեն", "Գրամեքենայի հայերեն"],
     tutorialTitle: "Մատների դիրքը մուտքագրելուց առաջ",
     visualKeyboard: "Տեսողական ստեղնաշար",
     keyboardMeta: "Հիմնական շարքը կենտրոնում է",
     keyboardLayoutLabel: "Ստեղնաշար",
     keyboardLayoutRegular: "Սովորական արևելահայերեն",
     keyboardLayoutLegacy: "Ավանդական արևելահայերեն",
+    keyboardLayoutTypewriter: "Գրամեքենայի հայերեն",
     keyboardLayoutNote: "Փոխիր նաև Windows-ի ստեղնաշարը, որպեսզի մուտքագրված նիշերը համընկնեն։",
     leftHand: "Ձախ ձեռք",
     rightHand: "Աջ ձեռք",
@@ -860,6 +862,12 @@ const ARMENIAN_KEYBOARD_ROWS = {
     ["ա", "ս", "դ", "ֆ", "ք", "հ", "ճ", "կ", "լ", "թ", "փ"],
     ["զ", "ց", "գ", "վ", "բ", "ն", "մ", "շ", "ղ", "ծ"],
   ],
+  typewriter: [
+    ["՝", "ֆ", "ձ", "և", "օ", "է", "ղ"],
+    ["ճ", "փ", "բ", "ս", "մ", "ո", "ւ", "կ", "ը", "թ", "ծ", "ց"],
+    ["ջ", "վ", "գ", "ե", "ա", "ն", "ի", "տ", "հ", "պ", "ր"],
+    ["ժ", "դ", "չ", "յ", "զ", "լ", "ք", "խ", "շ", "ռ"],
+  ],
 };
 const ARMENIAN_LAYOUT_CONFIGS = {
   regular: {
@@ -891,6 +899,21 @@ const ARMENIAN_LAYOUT_CONFIGS = {
     upper: ["խ", "ւ", "է", "ր", "տ", "ե", "ը", "ի", "ո", "պ", "չ", "ջ"],
     top: ["ձ", "յ", "և", "օ", "ռ", "ժ"],
     topFocus: "Ձ Յ ԵՎ Օ Ռ Ժ",
+  },
+  typewriter: {
+    id: "typewriter",
+    homeLeft: ["ջ", "վ", "գ", "ե", "ա"],
+    homeRight: ["ն", "ի", "տ", "հ", "պ", "ր"],
+    leftIndex: "ե",
+    rightIndex: "ի",
+    leftMiddle: "գ",
+    rightMiddle: "տ",
+    leftRing: "վ",
+    rightRing: "հ",
+    lower: ["ժ", "դ", "չ", "յ", "զ", "լ", "ք", "խ", "շ", "ռ"],
+    upper: ["ճ", "փ", "բ", "ս", "մ", "ո", "ւ", "կ", "ը", "թ", "ծ", "ց"],
+    top: ["ֆ", "ձ", "և", "օ", "է", "ղ"],
+    topFocus: "Ֆ Ձ ԵՎ Օ Է Ղ",
   },
 };
 const ARMENIAN_ALPHABET_KEYS = ["ա", "բ", "գ", "դ", "ե", "զ", "է", "ը", "թ", "ժ", "ի", "լ", "խ", "ծ", "կ", "հ", "ձ", "ղ", "ճ", "մ", "յ", "ն", "շ", "ո", "չ", "պ", "ջ", "ռ", "ս", "վ", "տ", "ր", "ց", "ւ", "փ", "ք", "օ", "ֆ", "և"];
@@ -1339,6 +1362,7 @@ function makeArmenianLessons(config) {
 const ARMENIAN_LESSON_SETS_BY_LAYOUT = {
   regular: makeArmenianLessons(ARMENIAN_LAYOUT_CONFIGS.regular),
   legacy: makeArmenianLessons(ARMENIAN_LAYOUT_CONFIGS.legacy),
+  typewriter: makeArmenianLessons(ARMENIAN_LAYOUT_CONFIGS.typewriter),
 };
 const ICON_PATHS = {
   activity: <path d="M3 12h4l3-8 4 16 3-8h4" />,
@@ -1403,6 +1427,7 @@ function loadLanguage() {
 function loadArmenianKeyboardLayout() {
   try {
     const stored = localStorage.getItem(ARMENIAN_KEYBOARD_STORAGE_KEY);
+    if (stored === "typewriter") return "typewriter";
     return stored === "regular" ? "regular" : "legacy";
   } catch {
     return "legacy";
@@ -1420,6 +1445,11 @@ function progressKey(language, lessonId) {
 function getLessonsForLanguage(language, armenianKeyboardLayout) {
   if (language !== "hy") return LESSON_SETS.en;
   return ARMENIAN_LESSON_SETS_BY_LAYOUT[armenianKeyboardLayout] || ARMENIAN_LESSON_SETS_BY_LAYOUT.legacy;
+}
+
+function getArmenianLayoutLabelKey(armenianKeyboardLayout) {
+  if (armenianKeyboardLayout === "typewriter") return "keyboardLayoutTypewriter";
+  return armenianKeyboardLayout === "legacy" ? "keyboardLayoutLegacy" : "keyboardLayoutRegular";
 }
 
 function formatKey(key, copy) {
@@ -1549,6 +1579,9 @@ function ArmenianKeyboardSwitcher({ keyboardLayout, copy, onKeyboardLayoutChange
         <button className={keyboardLayout === "legacy" ? "selected" : ""} type="button" onClick={() => onKeyboardLayoutChange("legacy")}>
           {copy.keyboardLayoutLegacy}
         </button>
+        <button className={keyboardLayout === "typewriter" ? "selected" : ""} type="button" onClick={() => onKeyboardLayoutChange("typewriter")}>
+          {copy.keyboardLayoutTypewriter}
+        </button>
       </div>
     </div>
   );
@@ -1659,7 +1692,7 @@ function VisualKeyboard({ keyboardRows, expectedKey, lessonKeys, lastKey, lastRe
                 normalizedLessonKeys.includes(normalizedKey) ? "lesson-key" : "",
                 normalizedKey === normalizedExpectedKey ? "expected" : "",
                 normalizedKey === normalizedLastKey ? lastResult : "",
-                (rowIndex === 1 && (key === "f" || key === "j")) || (rowIndex === 2 && (key === "ֆ" || key === "յ" || key === "ճ")) ? "home-anchor" : "",
+                (rowIndex === 1 && (key === "f" || key === "j")) || (rowIndex === 2 && (key === "ֆ" || key === "յ" || key === "ճ" || key === "ե" || key === "ի")) ? "home-anchor" : "",
               ].join(" ");
               return (
                 <span className={keyClasses} key={key}>
@@ -1819,7 +1852,16 @@ function ProgressPanel({ language, lessons, progress, lesson, bestStreak, copy, 
           <p>{copy.keyboardSetupIntro}</p>
           <div className="layout-pills">
             {copy.keyboardLayouts.map((layout, index) => (
-              <span className={(index === 0 && armenianKeyboardLayout === "regular") || (index === 1 && armenianKeyboardLayout === "legacy") ? "selected" : ""} key={layout}>
+              <span
+                className={
+                  (index === 0 && armenianKeyboardLayout === "regular") ||
+                  (index === 1 && armenianKeyboardLayout === "legacy") ||
+                  (index === 2 && armenianKeyboardLayout === "typewriter")
+                    ? "selected"
+                    : ""
+                }
+                key={layout}
+              >
                 {layout}
               </span>
             ))}
@@ -1904,7 +1946,7 @@ export default function App() {
   const lessonText = getLessonText(lesson, speedText);
   const copy = COPY[language];
   const keyboardRows = language === "hy" ? ARMENIAN_KEYBOARD_ROWS[armenianKeyboardLayout] : KEYBOARD_ROWS.en;
-  const keyboardMeta = language === "hy" ? copy[armenianKeyboardLayout === "legacy" ? "keyboardLayoutLegacy" : "keyboardLayoutRegular"] : copy.keyboardMeta;
+  const keyboardMeta = language === "hy" ? copy[getArmenianLayoutLabelKey(armenianKeyboardLayout)] : copy.keyboardMeta;
 
   runtimeRef.current = {
     language,
@@ -2030,7 +2072,7 @@ export default function App() {
   }, []);
 
   const changeArmenianKeyboardLayout = useCallback((nextLayout) => {
-    const safeLayout = nextLayout === "regular" ? "regular" : "legacy";
+    const safeLayout = nextLayout === "regular" || nextLayout === "typewriter" ? nextLayout : "legacy";
     const nextLesson = getLessonsForLanguage("hy", safeLayout)[0];
     prepareSpeedPrompt(nextLesson);
     speedFinishInProgressRef.current = false;
